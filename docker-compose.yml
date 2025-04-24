@@ -1,0 +1,11 @@
+version: '1.0'
+services:
+  java-app:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+  nginx-web:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile

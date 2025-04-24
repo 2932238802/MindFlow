@@ -1,0 +1,22 @@
+{
+    "extends": "@vue/tsconfig/tsconfig.dom.json",
+    "compilerOptions": {
+        "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
+
+        /* Linting */
+        "strict": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedSideEffectImports": true
+    },
+
+    // !!!!! 添加或修改这里的 paths !!!!!
+    "paths": {
+        "@assets/*": ["./src/assets/css/*"], // 路径相对于 baseUrl
+        // 如果你有其他别名，例如 '@/*' 指向 'src/*'，也在这里添加
+        "@/*": ["./src/*"]
+    },
+
+    "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.vue"]
+}

@@ -1,0 +1,55 @@
+.start-screen {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    text-align: center;
+    min-height: 80vh;
+    /* 让内容在屏幕上居中一些 */
+}
+
+h1 {
+    margin-bottom: 0.5em;
+    color: #42b983;
+    /* Vue 绿色 */
+}
+
+p {
+    margin-bottom: 2em;
+    color: #555;
+}
+
+.options-menu {
+    display: flex;
+    flex-direction: column;
+    /* 垂直排列按钮 */
+    gap: 1rem;
+    /* 按钮之间的间距 */
+    width: 100%;
+    max-width: 300px;
+    /* 限制按钮容器的最大宽度 */
+}
+
+button {
+    padding: 0.8em 1.5em;
+    font-size: 1em;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    font-weight: 500;
+    font-family: inherit;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: border-color 0.25s, background-color 0.25s;
+}
+
+button:hover {
+    border-color: #646cff;
+    /* Vite 蓝色 */
+    background-color: #f0f0f0;
+}
+
+button:focus,
+button:focus-visible {
+    outline: 4px auto -webkit-focus-ring-color;
+}
