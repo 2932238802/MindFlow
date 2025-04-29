@@ -59,39 +59,12 @@ const SubmitLogin = async () => {
             remember: login_data.remember,
         });
 
-        // 处理成功响应
-        // status 响应状态
         if (response.status === 200) {
-            // 假设后端返回一个 token
-            const token = response.data.token;
-            if (token) {
-                // 将 token 存储在本地存储中
-                // AuthToken 即是本地token
-                localStorage.setItem('AuthToken', token);
-
-                // sessionStorage 也是一种Web存储机制，但其数据仅在当前浏览器会话中有效。当浏览器窗口或标签页关闭
-                // localStorage 是一种Web存储机制，可以在用户的浏览器中存储数据。存储的数据没有过期时间，除非用户手动清除，否则数据会一直存在。
-                // 
-                if (login_data.remember) {
-                    localStorage.setItem('UserName', login_data.user_name);
-                }
-                else {
-                    sessionStorage.setItem('UserName', login_data.user_name);
-                }
-
-                //记得之后的逻辑补充这个
-                //const logout = () => {
-                //     localStorage.removeItem('authToken');
-                //     localStorage.removeItem('UserName');
-                //     sessionStorage.removeItem('UserName');
-                //     router.push('/login');
-                // };
-
-                // 跳转到主页或其他受保护的路由
-                router.push('/dashboard');
-            }
+            localStorage.setItem('UserName', login_data.user_name);
+            sessionStorage.setItem('UserName', login_data.user_name);
         }
     }
+    
     // 使用 any 类型：通过将 error 声明为 any，可以绕过类型检查，
     // 允许你在 catch 块中自由地访问 error 对象的属性。
     // 这在处理第三方库（如 axios）的错误时非常常见，因为这些库可能抛出自定义的错误类型。
@@ -129,10 +102,11 @@ const SubmitRegister = async () => {
         // 处理成功响应
         if (response.status === 201) {
             alert('注册成功！请登录。');
-            // 切换到登录表单
             showLogin();
         }
-    } catch (error: any) {
+    } 
+    
+    catch (error: any) {
         if (axios.isAxiosError(error)) {
             alert(error.response?.data.message || '注册失败，请重试。');
         } else {
@@ -176,7 +150,7 @@ const SubmitRegister = async () => {
                     </div>
                     <a href="#" class="forgot-password">忘记密码?</a>
                 </div>
-                <button type="submit" class="submit-btn">登 录</button>
+                <button type="submit" class="submit-btn" @click="SubmitLogin">登 录</button>
             </form>
 
             <form id="register-form" class="form" :class="{ active: activeForm === 'register' }">
@@ -201,7 +175,7 @@ const SubmitRegister = async () => {
                     <input type="password" id="register-confirm-password" name="register_confirm_password"
                         v-model="register_data.password_confirm" required>
                 </div>
-                <button type="submit" class="submit-btn">注 册</button>
+                <button type="submit" class="submit-btn" @click="SubmitRegister">注 册</button>
             </form>
         </div>
     </div>

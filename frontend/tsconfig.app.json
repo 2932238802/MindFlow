@@ -11,10 +11,8 @@
         "noUncheckedSideEffectImports": true
     },
 
-    // !!!!! 添加或修改这里的 paths !!!!!
     "paths": {
         "@assets/*": ["./src/assets/css/*"], // 路径相对于 baseUrl
-        // 如果你有其他别名，例如 '@/*' 指向 'src/*'，也在这里添加
         "@/*": ["./src/*"]
     },
 
