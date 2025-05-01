@@ -117,7 +117,6 @@ const SubmitRegister = async () => {
 
 
 </script>
-
 <template>
     <div class="container">
         <div class="form-container">

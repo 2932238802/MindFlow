@@ -1,2 +1,18 @@
+# 编辑器
 .idea
+
+# 学习文档
 doc
+
+# 数据库 和 json文件
+MindFlow.mysql
+*.json
+
+# 前端配置
+node_modules
+
+# 日志
+logs
+
+# 输出文档
+backend/target
