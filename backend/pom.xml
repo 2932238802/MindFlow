@@ -39,6 +39,14 @@
             <!-- 如果你的应用服务器提供了驱动，可以是 provided，但通常直接打包 -->
             <scope>runtime</scope>
         </dependency>
+
+        <!--加密依赖-->
+        <dependency>
+            <groupId>org.mindrot</groupId>
+            <artifactId>jbcrypt</artifactId>
+            <version>0.4</version>
+        </dependency>
+
     </dependencies>
 
 

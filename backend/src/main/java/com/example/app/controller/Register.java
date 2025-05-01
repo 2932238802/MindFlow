@@ -4,12 +4,13 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import main.java.com.example.app.util.db;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import main.java.com.example.app.util.password_encrypt;
+import main.java.com.example.app.util.db;
+
 
 @WebServlet("/api/register")
 public class Register extends HttpServlet {
@@ -64,7 +65,7 @@ public class Register extends HttpServlet {
             }
 
             // 插入新数据 //
-            String encrypted_password = PasswordUtils.encrypt(password); // 示例加密，需自己实现加密工具类
+            String encrypted_password = password_encrypt.encrypt(password);
 
             prep_insert.setString(1, user_name);
             prep_insert.setString(2, encrypted_password);

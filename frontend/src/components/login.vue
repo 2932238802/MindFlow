@@ -2,10 +2,8 @@
 
 import axios from 'axios';
 import { reactive, ref } from 'vue'; // 1. 引入 ref
-import { useRouter } from 'vue-router';
 
 //———————————————— 组件参数 ——————————————————//
-const router = useRouter();
 const activeForm = ref<'login' | 'register'>('login');
 
 // 这主要是为了利用 TypeScript 带来的静态类型检查和代码可维护性优势
