@@ -13,6 +13,11 @@ const routes = [
         name: 'login',
         component: () => import('../src/components/login.vue'),
     },
+    {
+        path:'/todolist',
+        name:'todolist',
+        component:() => import('../src/components/todolist.vue'),
+    }
     // {
     //     path: '/Index',
     //     name: 'Index',

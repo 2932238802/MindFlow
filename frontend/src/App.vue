@@ -1,8 +1,7 @@
 <template>
-    <main>
-        <!-- 这个会转到我们的路由 -->
+    <body>
         <router-view />
-    </main>
+    </body>
 </template>
 
 <script setup>

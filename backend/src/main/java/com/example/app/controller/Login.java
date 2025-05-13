@@ -1,13 +1,16 @@
-package main.java.com.example.app.controller;
+package com.example.app.controller;
 
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import main.java.com.example.app.util.password_encrypt;
-import main.java.com.example.app.util.db;
+import com.example.app.util.password_encrypt;
+import com.example.app.util.db;
 
+import com.fasterxml.jackson.databind.ObjectMapper; // 用于解析 JSON 数据
 
+import java.io.BufferedReader;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,65 +23,154 @@ import java.sql.SQLException;
 @WebServlet("/api/login")
 public class Login extends HttpServlet {
 
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
-        //
-        String path = request.getRequestURI();
+    // 定义一个 ObjectMapper 实例，用于解析 JSON 数据 (Jackson 库)
+    private static final ObjectMapper objectMapper = new ObjectMapper();
 
-        if (path.endsWith("/login")) {
-            HandleLogin(request, response);
-        }
+    @Override
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 获取请求 URL 路径
+        System.out.println("POST request received at /api/login");
+        // String path = request.getRequestURI();
+        HandleLogin(request, response);
     }
 
     /**
      * 私有成员函数 处理登录请求
      * 处理登录请求 然后和数据库验证一下
      *
-     * @param request  这个是请求
-     * @param response 这个是响应
+     * @param request  这个是请求对象
+     * @param response 这个是响应对象
      */
-    private void HandleLogin(HttpServletRequest request, HttpServletResponse response) {
-        // 获取姓名 //
-        String user_name = request.getParameter("user_name");
+    private void HandleLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 检查 Content-Type 是否是 application/json
+        if (!"application/json".equalsIgnoreCase(request.getContentType())) {
+            // 如果请求不是 JSON 格式，直接返回 415 Unsupported Media Type
+            response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
+            response.getWriter().write("{\"message\":\"Unsupported content type. Please use application/json.\"}");
+            return;
+        }
 
-        // 获取密码 //
-        String password = request.getParameter("password");
+        // 读取 JSON 数据 //
+        StringBuilder jsonBuilder = new StringBuilder();
+        try (BufferedReader reader = request.getReader()) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                jsonBuilder.append(line);
+            }
+        }
 
-        // 是不是记住 //
-        boolean remember = Boolean.parseBoolean(request.getParameter("remember"));
+        // 解析 JSON //
+        LoginRequest loginRequest;
+        try {
+            // 调试 //
+            System.out.println("Received JSON: " + jsonBuilder.toString());
 
-        // 根据数据库 处理一下 信息是不是正确 //
-        // 使用 try-with-resources 自动管理资源 //
+            loginRequest = objectMapper.readValue(jsonBuilder.toString(), LoginRequest.class);
+        }
+        catch (Exception e) {
+            //  //
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("{\"message\":\"Invalid JSON Data.\"}");
+            return;
+        }
+
+        // 获取登录信息
+        String user_name = loginRequest.getUser_name();
+        String password = loginRequest.getPassword();
+
+        // 之后完善 //
+        // boolean remember = loginRequest.isRemember();
+
+        // 根据数据库处理 信息是不是正确 //
+        // 使用 try-with-resources 自动管理资源
         try (
-                // getConnection 返回一个 Connection //
+                // 获取数据库连接 //
                 Connection connect = db.getConnection();
 
                 // 创建一个查询的语句 //
                 PreparedStatement prep = connect.prepareStatement(
-                        "select * from users where user_name = ? and password = ?")
+                        "SELECT * FROM users WHERE user_name = ?")
         ) {
-            // 为 SQL 查询中的占位符绑定参数 //
-            // 第一个问号绑定用户名参数 (1 表示第一个问号) //
-            // 第二个问号绑定用户密码参数 (2 表示第二个问号) //
+            // 为 SQL 查询中的占位符绑定参数
+            // 第一个问号绑定用户名参数 (1 表示第一个问号)
+            // 第二个问号绑定用户密码参数 (2 表示第二个问号)
             prep.setString(1, user_name);
-            prep.setString(2, password_encrypt.encrypt(password));
+
+            // Debug //
+            System.out.println("Executing SQL query: SELECT * FROM users WHERE user_name = ?");
+            System.out.println("Parameters: user_name=" + user_name);
 
             // 执行查询操作 并使用 try-with-resources 确保 ResultSet 自动关闭 //
             try (ResultSet result = prep.executeQuery()) {
                 if (result.next()) {
-                    // 登录成功返 ok //
-                    response.setStatus(HttpServletResponse.SC_OK);
-                    System.out.println("Login successful! User ID: " + result.getInt("user_id"));
-                } else {
-                    // 不然认证失败 //
+                    // 获得mysql的数据 //
+                    String hashedPassword = result.getString("password");
+
+                    // 验证一下 //
+                    if (password_encrypt.verify(password, hashedPassword)) {
+                        response.setStatus(HttpServletResponse.SC_OK);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"message\":\"Login successful!\"}");
+                        System.out.println("Login successful!User ID: " + result.getInt("user_id"));
+                    }
+                    else {
+                        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                        response.setContentType("application/json");
+                        response.getWriter().write("{\"message\":\"Login failed. Incorrect username or password.\"}");
+                        System.out.println("Login failed! Incorrect username or password.");
+                    }
+                }
+                else {
+                    // 如果用户名不存在
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                    System.out.println("Login failed! Incorrect username or password.");
+                    response.setContentType("application/json");
+                    response.getWriter().write("{\"message\":\"Login failed. Incorrect username or password.\"}");
+                    System.out.println("Login failed! User not found.");
                 }
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
+            // 捕获 SQL 异常并返回 HTTP 500 状态 //
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\":\"An internal server error occurred.\"}");
+        }
+    }
+
+    /**
+     * 内部类，用于解析 JSON 数据
+     * 定义用户提交的登录信息 (user_name, password, remember)
+     */
+    private static class LoginRequest {
+        // 定义字段
+        private String user_name;
+        private String password;
+        private boolean remember;
+
+        // Getter 和 Setter 方法，采用符合 Java Bean 规范的命名方式
+
+        public String getUser_name() { // Getter 方法
+            return user_name;
+        }
+
+        public void setUser_name(String user_name) { // Setter 方法
+            this.user_name = user_name;
+        }
+
+        public String getPassword() { // Getter 方法
+            return password;
+        }
+
+        public void setPassword(String password) { // Setter 方法
+            this.password = password;
+        }
+
+        public boolean isRemember() { // Getter 方法，针对 boolean 类型的命名规范
+            return remember;
+        }
+
+        public void setRemember(boolean remember) { // Setter 方法
+            this.remember = remember;
         }
     }
 }

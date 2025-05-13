@@ -1,4 +1,4 @@
-package main.java.com.example.app.util;
+package com.example.app.util;
 import org.mindrot.jbcrypt.BCrypt;
 
 public class password_encrypt {
