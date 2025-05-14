@@ -4,8 +4,8 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import com.example.app.util.password_encrypt;
-import com.example.app.util.db;
+import com.example.app.util.PasswordEncrypt;
+import com.example.app.util.DB;
 
 import com.fasterxml.jackson.databind.ObjectMapper; // 用于解析 JSON 数据
 
@@ -23,15 +23,15 @@ import java.sql.SQLException;
 @WebServlet("/api/login")
 public class Login extends HttpServlet {
 
-    // 定义一个 ObjectMapper 实例，用于解析 JSON 数据 (Jackson 库)
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    // 定义一个 ObjectMapper 实例，用于解析 JSON
+    private static final ObjectMapper objectmapper = new ObjectMapper();
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 获取请求 URL 路径
         System.out.println("POST request received at /api/login");
         // String path = request.getRequestURI();
-        HandleLogin(request, response);
+        handleLogin(request, response);
     }
 
     /**
@@ -41,7 +41,7 @@ public class Login extends HttpServlet {
      * @param request  这个是请求对象
      * @param response 这个是响应对象
      */
-    private void HandleLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 检查 Content-Type 是否是 application/json
         if (!"application/json".equalsIgnoreCase(request.getContentType())) {
             // 如果请求不是 JSON 格式，直接返回 415 Unsupported Media Type
@@ -65,7 +65,7 @@ public class Login extends HttpServlet {
             // 调试 //
             System.out.println("Received JSON: " + jsonBuilder.toString());
 
-            loginRequest = objectMapper.readValue(jsonBuilder.toString(), LoginRequest.class);
+            loginRequest = objectmapper.readValue(jsonBuilder.toString(), LoginRequest.class);
         }
         catch (Exception e) {
             //  //
@@ -85,7 +85,7 @@ public class Login extends HttpServlet {
         // 使用 try-with-resources 自动管理资源
         try (
                 // 获取数据库连接 //
-                Connection connect = db.getConnection();
+                Connection connect = DB.getConnection();
 
                 // 创建一个查询的语句 //
                 PreparedStatement prep = connect.prepareStatement(
@@ -107,7 +107,7 @@ public class Login extends HttpServlet {
                     String hashedPassword = result.getString("password");
 
                     // 验证一下 //
-                    if (password_encrypt.verify(password, hashedPassword)) {
+                    if (PasswordEncrypt.verify(password, hashedPassword)) {
                         response.setStatus(HttpServletResponse.SC_OK);
                         response.setContentType("application/json");
                         response.getWriter().write("{\"message\":\"Login successful!\"}");
@@ -145,32 +145,24 @@ public class Login extends HttpServlet {
         // 定义字段
         private String user_name;
         private String password;
-        private boolean remember;
-
         // Getter 和 Setter 方法，采用符合 Java Bean 规范的命名方式
 
         public String getUser_name() { // Getter 方法
             return user_name;
         }
 
-        public void setUser_name(String user_name) { // Setter 方法
-            this.user_name = user_name;
-        }
+
 
         public String getPassword() { // Getter 方法
             return password;
         }
 
-        public void setPassword(String password) { // Setter 方法
-            this.password = password;
-        }
-
-        public boolean isRemember() { // Getter 方法，针对 boolean 类型的命名规范
-            return remember;
-        }
-
-        public void setRemember(boolean remember) { // Setter 方法
-            this.remember = remember;
-        }
     }
+
+
+    @Override
+    public void destroy() {
+    super.destroy();
+  }
+
 }

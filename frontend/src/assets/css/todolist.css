@@ -350,6 +350,17 @@ h1 {
   opacity: 0.6;
   transition: all 0.3s ease;
 }
+.color-near-day {
+    background-color: #FFF3CD; 
+}
+
+.color-near-hour {
+    background-color: #FFECB5; 
+}
+
+.color-near-ten-min {
+    background-color: #F8D7DA; 
+}
 /* ---------------------- */
 
 

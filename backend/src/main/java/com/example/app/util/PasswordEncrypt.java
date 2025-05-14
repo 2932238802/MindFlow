@@ -1,7 +1,7 @@
 package com.example.app.util;
 import org.mindrot.jbcrypt.BCrypt;
 
-public class password_encrypt {
+public class PasswordEncrypt {
     // 加密密码 //
     public static String encrypt(String password) {
         return BCrypt.hashpw(password, BCrypt.gensalt());

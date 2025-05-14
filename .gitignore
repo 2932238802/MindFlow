@@ -5,7 +5,7 @@
 doc
 
 # 数据库 和 json文件
-MindFlow.mysql
+MindFlow.sql
 *.json
 
 # 前端配置

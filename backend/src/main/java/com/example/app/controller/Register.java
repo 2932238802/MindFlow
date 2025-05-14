@@ -10,10 +10,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.fasterxml.jackson.databind.ObjectMapper; // 用于解析 JSON 数据
+import com.fasterxml.jackson.databind.ObjectMapper; 
 
-import com.example.app.util.password_encrypt;
-import com.example.app.util.db;
+import com.example.app.util.PasswordEncrypt;
+import com.example.app.util.DB;
 
 /**
  * 监听注册信息
@@ -87,7 +87,7 @@ public class Register extends HttpServlet {
 
         try (
                 // 连接数据库 //
-                Connection connection = db.getConnection();
+                Connection connection = DB.getConnection();
 
                 PreparedStatement prep_check = connection.prepareStatement(
                         "SELECT COUNT(*) AS count FROM users WHERE user_name = ? OR email = ?");
@@ -110,7 +110,7 @@ public class Register extends HttpServlet {
             }
 
             // 插入新数据
-            String encrypted_password = password_encrypt.encrypt(password);
+            String encrypted_password = PasswordEncrypt.encrypt(password);
 
             prep_insert.setString(1, user_name);
             prep_insert.setString(2, encrypted_password);
@@ -150,24 +150,15 @@ public class Register extends HttpServlet {
             return user_name;
         }
 
-        public void setUser_name(String user_name) {
-            this.user_name = user_name;
-        }
+
 
         public String getEmail() {
             return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
         }
 
         public String getPassword() {
             return password;
         }
 
-        public void setPassword(String password) {
-            this.password = password;
-        }
     }
 }

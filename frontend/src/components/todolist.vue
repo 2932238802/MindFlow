@@ -1,34 +1,67 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
+import axios from 'axios'; 
 
 interface Task {
     id: number;
     name: string;
     isdelete: boolean;
-    time: string; // 时间字段，存储为本地时间字符串
+    time: string;       // 时间字段，存储为本地时间字符串
+    notified?: boolean; // 是否已发送通知，默认值为 false
 }
 
-let next_id = 0;
+let timer: number | undefined;
 const router = useRouter();
 const new_task = ref<string>('');
-const new_time = ref<string>(''); // 用于绑定时间输入框
+const new_time = ref<string>('');           // 用于绑定时间输入框
 const tasks = ref<Task[]>([]);
+
+// 当某些响应式数据发生变化时，所有依赖于这些数据的计算属性、方法和模板都会自动重新计算和更新。
+const currentTime = ref<Date>(new Date()); // 当前时间，用于依赖
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // A组合 ——————————————————
 const ReturnIndex = () => {
     router.push({ name: 'index' });
-}
+};
 const ToAbout = () => {
     router.push({ name: "about" });
-}
+};
 const ToSponsor = () => {
-    router.push({ name: "about" });
-}
+    router.push({ name: "sponsor" });
+};
 // A组合 ——————————————————
 
+
+
+
+
+
+
+
+
+
+
 // C组合 ——————————————————
-const AddTask = () => {
+const AddTask = async () => {
     let content = new_task.value.trim();
     let time = new_time.value.trim();
 
@@ -40,32 +73,99 @@ const AddTask = () => {
             time = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
         }
 
-        tasks.value.push({
-            id: next_id++,
+        const new_task_withoutid: Omit<Task, 'id'> = {
             name: content,
             isdelete: false,
-            time: time
-        });
+            time: time,
+            notified: false
+        };
 
-        // 清空输入框
-        new_task.value = '';
-        new_time.value = '';
+        // 发送请求到后端保存任务
+        try {
+            const response = await axios.post('/api/tasks', new_task_withoutid);
+            tasks.value.push(response.data); // 使用后端返回的数据，包括生成的id
+            // 清空输入框
+            new_task.value = '';
+            new_time.value = '';
+        } catch (error) {
+            console.error('添加任务失败', error);
+        }
     }
-}
+};
 // C组合 ——————————————————
 
-// D组合 ————————————————————————————————————————————
-const ToggleDelete = (id: number) => {
-    const task = tasks.value.find(t => t.id === id);
-    if (task) task.isdelete = !task.isdelete;
-}
 
-const ClearDeleted = () => {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// D组合 ————————————————————————————————————————————
+// 切换软删除
+const ToggleDelete = async (id:number) => {
+  const task = tasks.value.find(t => t.id === id);
+  if (!task) return;
+  task.isdelete = !task.isdelete;
+  try {
+    await axios.put('/api/altertask', {
+      id: id
+    });
+  } catch (err) {
+    console.error(' [error] 更新失败', err);
+  }
+};
+
+// 彻底删除所有被标记的
+const ClearDeleted = async () => {
+  try {
+    await axios.delete('/api/cleartasks');
+    // 本地也清理
     tasks.value = tasks.value.filter(t => !t.isdelete);
-}
+  } catch (err) {
+    console.error(' [error] 清理失败', err);
+  }
+};
+
 // D组合 ————————————————————————————————————————————
 
-// 时间格式化方法
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// E 格式化时间
 const formatTime = (time: string): string => {
     const date = new Date(time);
     return date.toLocaleString('zh-CN', {
@@ -75,7 +175,7 @@ const formatTime = (time: string): string => {
         hour: '2-digit',
         minute: '2-digit'
     });
-}
+};
 
 // 按时间排序的计算属性
 const sortedTasks = computed(() => {
@@ -88,7 +188,117 @@ const minDateTime = computed(() => {
     const pad = (n: number) => n.toString().padStart(2, '0');
     return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:${pad(now.getMinutes())}`;
 });
+// E 格式化时间
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// F 组合渲染任务样式
+const updateTaskColors = () => {
+    currentTime.value = new Date();                         // 更新当前时间，触发重新计算
+};
+const GetTaskColor = (task: Task): string => {
+    // now 是当前的时间
+    // tasktime 是任务设置时间
+    // diff 是两个时间相差 ms
+    const now = currentTime.value;
+    const tasktime = new Date(task.time).getTime();
+    const diff = tasktime - now.getTime();                  // 剩余时间（毫秒） getTime() 方法返回 Date 对象表示的时间与 UTC 1970年1月1日午夜之间的毫秒数
+    if (isNaN(tasktime)) {
+        return 'invalid-time';                              // 定义一个类用于标识无效时间
+    }
+
+    const one_day = 24 * 60 * 60 * 1000;                     // 1天
+    const one_hour = 60 * 60 * 1000;                         // 1小时
+    const ten_minutes = 10 * 60 * 1000;                      // 10分钟
+
+    if (diff <= ten_minutes && diff > 0 && !task.notified) { 
+        // 临近10分钟且未发送通知时
+        return 'color-near-ten-min';
+    } 
+    else if (diff <= one_hour && diff > ten_minutes) { 
+        // 临近1小时
+        return 'color-near-hour';
+    } else if (diff <= one_day && diff > one_hour) { 
+        // 临近1天
+        return 'color-near-day';
+    } else {
+        return '';
+    }
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// G 挂载
+onMounted(() => {
+    // 每分钟更新一次
+    timer = window.setInterval(updateTaskColors, 60000); 
+
+    // 获取后端数据
+    FetchData();
+    updateTaskColors();
+});
+
+onUnmounted(() => {
+    // clearInterval 清理记时任务
+    if (timer !== undefined) {
+        clearInterval(timer);
+    }
+});
+// F 组合渲染任务样式
+
+
+
+
+
+
+
+// H 后端对接代码
+const FetchData = async () => {
+    try {
+        const response = await axios.get('/api/loadtask');
+        tasks.value = response.data;
+    } 
+    catch (error) {
+        console.error('获取任务失败', error);
+    }
+};
+
+
 </script>
+
 
 <template>
     <body class="todolist">
@@ -130,7 +340,7 @@ const minDateTime = computed(() => {
                 <li 
                     v-for="task in sortedTasks" 
                     :key="task.id"
-                    :class="{ 'deleted': task.isdelete }">
+                    :class="[{ 'deleted': task.isdelete },GetTaskColor(task)]">
                     <span class="task-name">{{ task.name }}</span>
                     <span class="task-time">{{ formatTime(task.time) }}</span>
                     <button class="delete-btn" @click="ToggleDelete(task.id)">

@@ -6,7 +6,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class db {
+public class DB {
 
     // 数据库 URL，连接到 MindFlow 数据库
     private static final String URL = "jdbc:mysql://localhost:3306/MindFlow?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
@@ -28,7 +28,8 @@ public class db {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             return DriverManager.getConnection(URL, USER, PASSWORD);
-        } catch (ClassNotFoundException | SQLException e) {
+        } 
+        catch (ClassNotFoundException | SQLException e) {
             throw new SQLException("Database connection error", e);
         }
     }
