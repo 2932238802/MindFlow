@@ -1,4 +1,12 @@
-/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/util/db.java
 /home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/controller/Register.java
-/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/util/password_encrypt.java
+/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/model/Task.java
+/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/controller/SendMessage.java
+/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/util/PasswordEncrypt.java
+/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/util/DB.java
+/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/controller/Toggletask.java
 /home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/controller/Login.java
+/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/controller/LoadTasks.java
+/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/controller/AddTask.java
+/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/dao/TaskDao.java
+/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/util/GetId.java
+/home/losa/LosAngelous/Project/MindFlow/backend/src/main/java/com/example/app/controller/Cleartask.java

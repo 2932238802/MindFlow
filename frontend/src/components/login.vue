@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import axios from 'axios';
-import { reactive, ref } from 'vue'; 
+import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
 
@@ -46,14 +46,12 @@ function showLogin() {
 function showRegister() {
     activeForm.value = 'register';
 }
-// const Sleep = (time:number): Promise<void> =>
-// {
-//     return new Promise(resolve =>
-//         {
-//             setTimeout(resolve,time);
-//         }
-//     );
-// };
+const Sleep = (time: number): Promise<void> => {
+    return new Promise(resolve => {
+        setTimeout(resolve, time);
+    }
+    );
+};
 
 
 //———————————————— 业务函数 ——————————————————//
@@ -61,68 +59,50 @@ function showRegister() {
  * SubmitLogin 提交登录信息
  * SubmitRegister 提交注册信息
  */
-const SubmitLogin = async (event:Event) => {
-
+const SubmitLogin = async (event: Event) => {
     event.preventDefault();
-    // 调试 //
     console.log("Sending login data:", {
         "user_name": login_data.user_name,
         "password": login_data.password,
-        "remember": login_data.remember,
+        "remember": login_data.remember, 
     });
 
     console.log("Headers:", {
         'Content-Type': 'application/json',
     });
 
-    // try {
-    //     const response = await axios.post('/api/login', {
-    //         "user_name": login_data.user_name,
-    //         "password": login_data.password,
-    //         "remember": login_data.remember,
-    //     }, {
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         }
-    //     });
+    try {
+        const response = await axios.post('/api/login', {
+            user_name: login_data.user_name,
+            password: login_data.password
+        }, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
 
-    //     if (response.status === 200) {
-    //         localStorage.setItem('UserName', login_data.user_name);
-    //         sessionStorage.setItem('UserName', login_data.user_name);
-    //         Sleep(2000).then(()=>
-    //     {
-    //         alert("登录成功!");
-    //         router.push({name:'todolist'});
-    //     })
-    //     }
-    // }
+        if (response.status === 200) {
+            localStorage.setItem('UserName', login_data.user_name);
+            sessionStorage.setItem('UserName', login_data.user_name);
 
-
-
-    // // 使用 any 类型：通过将 error 声明为 any，可以绕过类型检查，
-    // // 允许你在 catch 块中自由地访问 error 对象的属性。
-    // // 这在处理第三方库（如 axios）的错误时非常常见，因为这些库可能抛出自定义的错误类型。
-    // catch (error: any) {
-    //     // 处理错误响应
-    //     if (axios.isAxiosError(error)) {
-
-    //         // ?.（可选链操作符）：用于安全地访问嵌套属性，
-    //         // 如果前面的属性不存在（即 undefined 或 null），整个表达式会返回 undefined，而不会抛出错误。
-    //         // error.response?.data.message：尝试获取服务器返回的错误消息。
-    //         // 如果存在，就显示该消息；否则，显示默认的 '登录失败，请重试。'。
-    //         alert(error.response?.data.message || '登录失败，请重试。');
-    //     } else {
-    //         alert('An unexpected error occurred!');
-    //     }
-    // }
-
-
-    router.push({name:'todolist'});
-
+            Sleep(1000).then(() => { 
+                alert("登录成功!");
+                router.push({ name: 'todolist' }); 
+            });
+        } else {
+            alert(response.data.message || '登录失败，请检查响应。');
+        }
+    } catch (error: any) {
+        if (axios.isAxiosError(error)) {
+            alert(error.response?.data.message || '登录失败，请重试。');
+        } else {
+            alert('An unexpected error occurred!');
+        }
+    }
 };
 
 
-const SubmitRegister = async (event:Event) => {
+const SubmitRegister = async (event: Event) => {
 
     event.preventDefault();
 
@@ -173,7 +153,7 @@ const SubmitRegister = async (event:Event) => {
                 </button>
             </div>
 
-            <form id="login-form" class="form" method="POST"  :class="{ active: activeForm === 'login' }">
+            <form id="login-form" class="form" method="POST" :class="{ active: activeForm === 'login' }">
                 <h2>账户登录</h2>
                 <div class="input-group">
                     <label for="login-username">用户名 / 邮箱</label>

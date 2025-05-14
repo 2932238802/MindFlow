@@ -1,6 +1,14 @@
-com/example/app/util/db.class
+com/example/app/dao/TaskDao.class
 com/example/app/controller/Register.class
 com/example/app/controller/Login.class
 com/example/app/controller/Login$LoginRequest.class
-com/example/app/util/password_encrypt.class
+com/example/app/controller/SendMessage.class
+com/example/app/controller/AddTask.class
+com/example/app/util/DB.class
+com/example/app/util/GetId.class
+com/example/app/controller/LoadTasks.class
+com/example/app/util/PasswordEncrypt.class
+com/example/app/controller/Cleartask.class
+com/example/app/model/Task.class
 com/example/app/controller/Register$RegisterRequest.class
+com/example/app/controller/Toggletask.class

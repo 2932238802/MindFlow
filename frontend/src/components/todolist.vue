@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import axios from 'axios'; 
+import axios from 'axios';
 
 interface Task {
     id: number;
@@ -19,11 +19,6 @@ const tasks = ref<Task[]>([]);
 
 // 当某些响应式数据发生变化时，所有依赖于这些数据的计算属性、方法和模板都会自动重新计算和更新。
 const currentTime = ref<Date>(new Date()); // 当前时间，用于依赖
-
-
-
-
-
 
 
 
@@ -59,9 +54,11 @@ const ToSponsor = () => {
 
 
 
-
 // C组合 ——————————————————
 const AddTask = async () => {
+
+
+
     let content = new_task.value.trim();
     let time = new_time.value.trim();
 
@@ -81,14 +78,39 @@ const AddTask = async () => {
         };
 
         // 发送请求到后端保存任务
+        // 发送请求到后端保存任务
         try {
-            const response = await axios.post('/api/tasks', new_task_withoutid);
-            tasks.value.push(response.data); // 使用后端返回的数据，包括生成的id
-            // 清空输入框
-            new_task.value = '';
-            new_time.value = '';
+            const response = await axios.post('/api/addtask', new_task_withoutid,{
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+            if (response.data.error) {
+                // 如果返回有 error 字段
+                alert(`任务添加失败：${response.data.error}`);
+            } else if (response.data.id) {
+                // 如果返回有 id，说明任务添加成功：
+                const taskid = response.data.id;
+
+                const newtask: Task = {
+                    name: content,
+                    time: time,
+                    isdelete: false,
+                    notified: false,
+                    id: taskid
+                };
+
+                // 使用后端返回的数据，包括生成的id
+                tasks.value.push(newtask); 
+                // 清空输入框
+                new_task.value = '';
+                new_time.value = '';
+            }
         } catch (error) {
             console.error('添加任务失败', error);
+            alert('添加任务时发生错误!');
+        } finally {
         }
     }
 };
@@ -114,28 +136,45 @@ const AddTask = async () => {
 
 // D组合 ————————————————————————————————————————————
 // 切换软删除
-const ToggleDelete = async (id:number) => {
-  const task = tasks.value.find(t => t.id === id);
-  if (!task) return;
-  task.isdelete = !task.isdelete;
-  try {
-    await axios.put('/api/altertask', {
-      id: id
-    });
-  } catch (err) {
-    console.error(' [error] 更新失败', err);
-  }
+const ToggleDelete = async (id: number) => {
+    const task = tasks.value.find(t => t.id === id);
+    if (!task) return;
+    task.isdelete = !task.isdelete;
+    try {
+        const response = await axios.put('/api/altertask', {
+            id: id
+        },{
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.data.error)
+        {
+            alert(response.data.error);
+        }
+    } catch (err) {
+        console.error(' [error] 更新失败', err);
+    }
 };
 
 // 彻底删除所有被标记的
 const ClearDeleted = async () => {
-  try {
-    await axios.delete('/api/cleartasks');
-    // 本地也清理
-    tasks.value = tasks.value.filter(t => !t.isdelete);
-  } catch (err) {
-    console.error(' [error] 清理失败', err);
-  }
+    try {
+        const response = await axios.delete('/api/cleartasks');
+
+        if (response.data.message) {
+            alert(response.data.message);
+            tasks.value = tasks.value.filter(t => !t.isdelete);
+        }
+        else if(response.data.error)
+        {
+            alert(`任务删除失败:${response.data.error}`);
+        }
+    }
+    catch (err) {
+        console.error(' [error] 清理失败', err);
+    }
 };
 
 // D组合 ————————————————————————————————————————————
@@ -226,14 +265,14 @@ const GetTaskColor = (task: Task): string => {
     const one_hour = 60 * 60 * 1000;                         // 1小时
     const ten_minutes = 10 * 60 * 1000;                      // 10分钟
 
-    if (diff <= ten_minutes && diff > 0 && !task.notified) { 
+    if (diff <= ten_minutes && diff > 0 && !task.notified) {
         // 临近10分钟且未发送通知时
         return 'color-near-ten-min';
-    } 
-    else if (diff <= one_hour && diff > ten_minutes) { 
+    }
+    else if (diff <= one_hour && diff > ten_minutes) {
         // 临近1小时
         return 'color-near-hour';
-    } else if (diff <= one_day && diff > one_hour) { 
+    } else if (diff <= one_day && diff > one_hour) {
         // 临近1天
         return 'color-near-day';
     } else {
@@ -264,8 +303,7 @@ const GetTaskColor = (task: Task): string => {
 // G 挂载
 onMounted(() => {
     // 每分钟更新一次
-    timer = window.setInterval(updateTaskColors, 60000); 
-
+    timer = window.setInterval(updateTaskColors, 60000);
     // 获取后端数据
     FetchData();
     updateTaskColors();
@@ -285,12 +323,26 @@ onUnmounted(() => {
 
 
 
+
+
+
+
+
 // H 后端对接代码
 const FetchData = async () => {
     try {
-        const response = await axios.get('/api/loadtask');
+        const response = await axios.get('/api/loadtask',{
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if(response.data.error)
+        {
+            alert(response.data.error);
+        }
         tasks.value = response.data;
-    } 
+    }
     catch (error) {
         console.error('获取任务失败', error);
     }
@@ -299,8 +351,8 @@ const FetchData = async () => {
 
 </script>
 
-
 <template>
+
     <body class="todolist">
         <div class="container">
             <!-- A组合 —————————————————— -->
@@ -316,19 +368,8 @@ const FetchData = async () => {
 
             <!-- C组合 —————————————————— -->
             <div class="add-task-form">
-                <input 
-                    type="text" 
-                    id="task-input" 
-                    placeholder="输入新任务..." 
-                    v-model="new_task" 
-                    @keyup.enter="AddTask"
-                >
-                <input 
-                    type="datetime-local" 
-                    id="time-input" 
-                    v-model="new_time"
-                    :min="minDateTime"
-                >
+                <input type="text" id="task-input" placeholder="输入新任务..." v-model="new_task" @keyup.enter="AddTask">
+                <input type="datetime-local" id="time-input" v-model="new_time" :min="minDateTime">
                 <button id="add-task-btn" @click="AddTask">添加任务</button>
             </div>
             <!-- —————————————————— -->
@@ -337,10 +378,8 @@ const FetchData = async () => {
             <button id="clear-task" class="clear-task" @click="ClearDeleted">清理'已删'任务</button>
 
             <ul id="task-list">
-                <li 
-                    v-for="task in sortedTasks" 
-                    :key="task.id"
-                    :class="[{ 'deleted': task.isdelete },GetTaskColor(task)]">
+                <li v-for="task in sortedTasks" :key="task.id"
+                    :class="[{ 'deleted': task.isdelete }, GetTaskColor(task)]">
                     <span class="task-name">{{ task.name }}</span>
                     <span class="task-time">{{ formatTime(task.time) }}</span>
                     <button class="delete-btn" @click="ToggleDelete(task.id)">
