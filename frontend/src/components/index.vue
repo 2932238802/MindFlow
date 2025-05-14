@@ -4,18 +4,15 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 function HandleLogin() {
-    
     router.push({ name: 'login' })
 }
 
 function HandleAbout() {
-    console.log('显示关于信息...');
-    alert('关于页面待实现');
+    router.push({name:'about'})
 }
 
 function HandleSponsor() {
-    console.log('跳转到赞助页面...');
-    alert('赞助链接待实现');
+    router.push({name:'sponsor'})
 }
 </script>
 

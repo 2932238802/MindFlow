@@ -17,6 +17,16 @@ const routes = [
         path:'/todolist',
         name:'todolist',
         component:() => import('../src/components/todolist.vue'),
+    },
+    {
+        path:'/about',
+        name:'about',
+        component:() => import('../src/components/about.vue'),
+    },
+    {
+        path:'/sponsor',
+        name:'sponsor',
+        component:() => import('../src/components/sponsor.vue'),
     }
     // {
     //     path: '/Index',
