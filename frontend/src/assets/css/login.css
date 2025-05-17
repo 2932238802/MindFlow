@@ -139,13 +139,13 @@ h2 {
     font-weight: 400;
 }
 
-.forgot-password {
+.adminlogin {
     color: #555;
     text-decoration: none;
     transition: color 0.3s ease;
 }
 
-.forgot-password:hover {
+.adminlogin:hover {
     color: #000;
     text-decoration: underline;
 }

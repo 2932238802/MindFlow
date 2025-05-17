@@ -3,7 +3,7 @@ package com.example.app.controller;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import com.example.app.dao.TaskDao;
+import com.example.app.dao.Dao;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -12,6 +12,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/api/cleartasks")
 public class Cleartask extends HttpServlet {
@@ -26,13 +27,24 @@ public class Cleartask extends HttpServlet {
     response.setCharacterEncoding("UTF-8");
 
     Gson gson = new Gson();
-    TaskDao dao = new TaskDao();
+    Dao dao = new Dao();
+
+    // 获取id 
+    HttpSession session = request.getSession();
+    if (session == null || session.getAttribute("user_id") == null) {
+      // 说明还没认证
+      response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+      response.getWriter().write("{\"message\":\"please auth first!\"}");
+      return;
+    }
+
+    int user_id = (int) session.getAttribute("user_id");
+
     try {
       // 执行删除操作
-      dao.clearTask();
+      dao.clearTask(user_id);
       response.setStatus(HttpServletResponse.SC_OK);
 
-      // 可选：返回操作结果
       JsonObject result = new JsonObject();
       result.addProperty("message", "已清理所有标记为已删除的任务");
 

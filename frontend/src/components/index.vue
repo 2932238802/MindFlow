@@ -37,4 +37,5 @@ function HandleSponsor() {
 
 <style scoped>
 @import '@assets/index.css';
+
 </style>

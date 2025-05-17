@@ -28,8 +28,6 @@ public class Login extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // 获取请求 URL 路径
-        System.out.println("POST request received at /api/login");
         // String path = request.getRequestURI();
         handleLogin(request, response);
     }
@@ -44,7 +42,7 @@ public class Login extends HttpServlet {
     private void handleLogin(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 检查 Content-Type 是否是 application/json
         if (!"application/json".equalsIgnoreCase(request.getContentType())) {
-            // 如果请求不是 JSON 格式，直接返回 415 Unsupported Media Type
+            // 如果请求不是 JSON 格式，直接返回 415
             response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
             response.getWriter().write("{\"message\":\"Unsupported content type. Please use application/json.\"}");
             return;
@@ -78,8 +76,6 @@ public class Login extends HttpServlet {
         String user_name = loginRequest.getUser_name();
         String password = loginRequest.getPassword();
 
-        // 之后完善 //
-        // boolean remember = loginRequest.isRemember();
 
         // 根据数据库处理 信息是不是正确 //
         // 使用 try-with-resources 自动管理资源
@@ -106,9 +102,17 @@ public class Login extends HttpServlet {
                     // 获得mysql的数据 //
                     String hashedPassword = result.getString("password");
 
+                    // 获取唯一 user_id
+                    int user_id = result.getInt("user_id");
+
                     // 验证一下 //
                     if (PasswordEncrypt.verify(password, hashedPassword)) {
-                        response.setStatus(HttpServletResponse.SC_OK);
+                        // 验证通过
+                        jakarta.servlet.http.HttpSession session =request.getSession(true);   // true 表示没有session 就创建
+                        session.setAttribute("user_id", user_id);
+
+
+                        response.setStatus(HttpServletResponse.SC_CREATED);
                         response.setContentType("application/json");
                         response.getWriter().write("{\"message\":\"Login successful!\"}");
                         System.out.println("Login successful!User ID: " + result.getInt("user_id"));
@@ -116,16 +120,16 @@ public class Login extends HttpServlet {
                     else {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.setContentType("application/json");
-                        response.getWriter().write("{\"message\":\"Login failed. Incorrect username or password.\"}");
-                        System.out.println("Login failed! Incorrect username or password.");
+                        response.getWriter().write("{\"message\":\"Login failed. Incorrect username or password\"}");
+                        System.out.println("Login failed! Incorrect username or password");
                     }
                 }
                 else {
                     // 如果用户名不存在
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.setContentType("application/json");
-                    response.getWriter().write("{\"message\":\"Login failed. Incorrect username or password.\"}");
-                    System.out.println("Login failed! User not found.");
+                    response.getWriter().write("{\"message\":\"Login failed. Incorrect username or password\"}");
+                    System.out.println("Login failed! User not found");
                 }
             }
         } catch (SQLException e) {
@@ -133,7 +137,7 @@ public class Login extends HttpServlet {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             response.setContentType("application/json");
-            response.getWriter().write("{\"message\":\"An internal server error occurred.\"}");
+            response.getWriter().write("{\"message\":\"An internal server error occurred\"}");
         }
     }
 

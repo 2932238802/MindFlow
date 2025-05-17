@@ -110,5 +110,6 @@ const copyright_year = computed(() => new Date().getFullYear());
 </script>
 <style scoped>
 @import '@assets/about.css';
+
 </style>
 

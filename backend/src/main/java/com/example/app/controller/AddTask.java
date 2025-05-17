@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import com.example.app.dao.TaskDao;
+import com.example.app.dao.Dao;
 import com.example.app.model.Task;
 import com.example.app.util.GetId;
 import com.google.gson.Gson;
@@ -15,16 +15,27 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
-import java.util.logging.Logger;
+
+
+/**
+ * 1. AddTask 添加任务的类
+ * 2. doPost 处理post请求
+ * 主要的代码逻辑: 设置response内容格式
+ * 
+ * 
+ * 
+ * 
+ * 
+ * 
+ */
+
+
+
 
 @WebServlet("/api/addtask")
 public class AddTask extends HttpServlet {
-    private static final Logger LOGGER = Logger.getLogger(AddTask.class.getName());
-    @Override
-    public void init() throws ServletException {
-        LOGGER.info("********** AddTask Servlet Initialized **********");
-    }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -34,44 +45,46 @@ public class AddTask extends HttpServlet {
         response.setCharacterEncoding("utf-8");
 
         Gson gson = new Gson();
-        TaskDao taskdao = new TaskDao();
-        BufferedReader reader = request.getReader();
+        Dao taskdao = new Dao();
         StringBuilder sb = new StringBuilder();
+
+        // 读取请求体内容
         String line;
-
-        while ((line = reader.readLine()) != null) {
-            sb.append(line);
+        try (BufferedReader reader = request.getReader()) { 
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
         }
+
         String requestBody = sb.toString();
-
-        LOGGER.info("AddTask doPost Invoked. Received request body: " + requestBody);
-
         Task taskWithoutId = gson.fromJson(requestBody, Task.class);
-        String generatedId = GetId.getUuid();                                           // 通过 GetId 类生成唯一的 id
+        String generatedId = GetId.getUuid();
+        HttpSession session = request.getSession();
+        if (session == null || session.getAttribute("user_id") == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("{\"message\":\"please auth first!\"}");
+            return;
+        }
 
-        // 创建新的 Task 对象，并设置手动生成的 id
+        int user_id = (int) session.getAttribute("user_id");
+
         Task task = new Task();
         task.setId(generatedId);
         task.setName(taskWithoutId.getName());
         task.setIsdelete(taskWithoutId.getIsdelete());
         task.setTime(taskWithoutId.getTime());
         task.setNotified(taskWithoutId.getNotified());
+        task.setUserid(user_id);
+        task.setImportance(taskWithoutId.getImportance());
 
-        LOGGER.info("Attempting to add task to DAO. Task data: " + gson.toJson(task));
-        try{
+        try {
             taskdao.addTask(task);
             JsonObject json_response = new JsonObject();
-
-            // todo:  √
             json_response.addProperty("id", task.getId());
             response.getWriter().write(gson.toJson(json_response));
-        }
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             JsonObject error = new JsonObject();
-
-            // todo:  √
             error.addProperty("error", "增加任务时候发生错误");
             response.getWriter().write(gson.toJson(error));
         }

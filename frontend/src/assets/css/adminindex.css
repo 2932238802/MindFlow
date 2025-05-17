@@ -1,0 +1,339 @@
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    background-color: #f7f8fa;
+    color: #2c3e50;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+    max-width: 1100px;
+    margin: 30px auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border: 1px solid #e0e6ed;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+
+/* A 标题部分 */
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 25px;
+    border-bottom: 1px solid #e0e6ed;
+}
+
+header h1 {
+    color: #1a202c;
+    font-size: 1.9em;
+    font-weight: 600;
+    margin: 0;
+}
+
+
+
+
+/* 返回的样式 */
+.return{
+    position: relative;
+    left:20px;
+
+    width: 70px;
+    height: 40px;
+
+    font-size: 17px;
+    text-align: center;
+
+    border-radius: 5px;
+    border: 1px solid rgb(132, 123, 123);
+    
+    color: #444444;
+    transition: background-color 1s ease; 
+
+}
+
+.return:hover   
+{
+    background-color: rgb(167, 167, 167); 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+/* B 用户部分 */
+main {
+    padding: 0;
+}
+
+.user-table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    font-size: 0.9em;
+}
+
+th, td {
+    border: 1px solid #e0e6ed;
+    padding: 14px 18px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+/* 用户id 用户名 邮箱 操作 上面的栏目 */
+thead th {
+    background-color: #f7f8fa;
+    color: #4a5568;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.2px;
+}
+
+
+/* 每一行的玄日那个效果 */
+tbody tr:hover {
+    background-color: #f0f3f7;
+    transition: background-color 0.15s ease-in-out;
+}
+
+
+.actions .action-button {
+    display: inline-block;
+    padding: 8px 30px;
+    margin: 0 50px;
+    border: 1px solid #cbd5e0;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #2d3748;
+    background-color: #ffffff;
+    font-size: 0.85em;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, border-color 0.15s ease-in-out, transform 0.1s ease;
+}
+.actions .action-button:hover {
+    background-color: #6ab1df;
+    border-color: #a0aec0;
+    color: #1a202c;
+    transform: translateY(-1px);
+}
+.actions .action-button:active {
+    transform: translateY(0px);
+    background-color: #e2e8f0;
+}
+
+.action-button.delete {
+    border-color: #e53e3e;
+    color: #e53e3e;
+}
+.action-button.delete:hover {
+    background-color: #e53e3e;
+    color: #ffffff;
+    border-color: #e53e3e;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.message-editor-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.65); /* 半透明背景 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10010; 
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.message-editor-content {
+    background-color: #ffffff;
+    color: #333333;
+    padding: 25px 35px;
+    border-radius: 10px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+    min-width: 400px;
+    max-width: 600px;
+    width: auto;
+    border: 1px solid #e0e0e0;
+    animation: fadeInScale 0.3s ease-out; 
+}
+
+.message-editor-content h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #2c3e50;
+    font-size: 1.3em;
+    text-align: center;
+}
+
+.message-textarea {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 1em;
+    line-height: 1.5;
+    box-sizing: border-box;
+    resize: vertical; 
+    min-height: 100px;
+}
+
+.message-editor-actions {
+    display: flex;
+    justify-content: flex-end; 
+    gap: 15px; 
+}
+
+.message-editor-actions button {
+    padding: 10px 25px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95em;
+    font-weight: 500;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.button-send {
+    background-color: #767976;
+    color: white;
+}
+.button-send:hover {
+    background-color: #5b8564;
+}
+.button-send:active {
+    transform: scale(0.97);
+}
+
+.button-cancel {
+    background-color: #6c757d; 
+    color: white;
+}
+.button-cancel:hover {
+    background-color: #5a6268;
+}
+.button-cancel:active {
+    transform: scale(0.97);
+}
+
+/* 确保动画定义存在 (如果你之前有) */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* C 版权部分 */
+footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 25px;
+    border-top: 1px solid #e0e6ed;
+    font-size: 0.85em;
+    color: #718096;
+}
+
+@media (max-width: 768px) {
+    .container {
+        margin: 15px;
+        padding: 20px;
+        border-radius: 4px;
+    }
+    header h1 {
+        font-size: 1.65em;
+    }
+    th, td {
+        padding: 12px 10px;
+        font-size: 0.85em;
+    }
+    .actions a.action-button {
+        padding: 8px 12px;
+        font-size: 0.8em;
+    }
+}
+
+@media (max-width: 600px) { 
+    .actions a.action-button {
+        display: block; 
+        width: calc(100% - 10px);
+        margin-left: 0;
+        margin-right: 0;
+        margin-bottom: 8px;
+        box-sizing: border-box;
+        text-align: center;
+    }
+    .pagination a.page-link { 
+        padding: 6px 10px;
+        font-size: 0.9em;
+    }
+}
+
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.5em;
+    }
+    body {
+        font-size: 15px;
+    }
+}
+
+
+
+

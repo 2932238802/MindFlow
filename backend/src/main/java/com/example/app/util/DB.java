@@ -8,13 +8,10 @@ import java.sql.SQLException;
 
 public class DB {
 
-    // 数据库 URL，连接到 MindFlow 数据库
     private static final String URL = "jdbc:mysql://localhost:3306/MindFlow?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC";
 
-    // 使用新创建的用户 MindFlowApp
     private static final String USER = "MindFlowApp";
-
-    // 使用 MindFlowApp 的密码
+    
     private static final String PASSWORD = "!Lsj20041021";
 
     /**

@@ -27,30 +27,22 @@ const routes = [
         path:'/sponsor',
         name:'sponsor',
         component:() => import('../src/components/sponsor.vue'),
-    }
-    // {
-    //     path: '/Index',
-    //     name: 'Index',
-    //     component: () => import('../view/Index.vue'),
-    //     children: [
-    //         {
-    //             path: 'article/:id',
-    //             name: 'Article',
-    //             component: () => import('../view/Article.vue'),
-    //             props: true,
-    //         },
-    //     ],
-    // },
-    // {
-    //     path: '/:pathMatch(.*)*',
-    //     name: 'NotFound',
-    //     component: () => import('../view/NotFound.vue'), // 404 页面
-    // },
+    },
+    {
+        path:'/adminlogin',
+        name:'adminlogin',
+        component:() => import('../src/components/adminlogin.vue'),
+    },
+    {
+        path:'/adminindex',
+        name:'adminindex',
+        component:()=>import('../src/components/adminindex.vue') // <<<--- 修正这里
+    },
 ];
 
 const router = createRouter({
     history: createWebHistory(),
-    routes,
+    routes, 
 });
 
 export default router;

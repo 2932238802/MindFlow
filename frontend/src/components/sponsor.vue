@@ -14,8 +14,8 @@
     <section id="why-support">
       <h2>为什么支持 {{ project_name }}？</h2>
       <p>
-        {{ project_name }} 是一个{{ project_type_description }}。
-        我们致力于{{ project_goal }}。
+        {{ project_name }} 是一个{{ project_type_description }} 
+        我们致力于{{ project_goal }} 
       </p>
       <p>您的支持将帮助我们：</p>
       <ul>
@@ -31,7 +31,7 @@
 
       <h3>直接捐助</h3>
       <p>
-        如果您觉得 {{ project_name }} 对您有所帮助，并希望支持我们的工作，可以通过以下方式进行小额捐助。每一份支持都是对我们的巨大鼓励！
+        如果您觉得 {{ project_name }} 对您有所帮助，并希望支持我们的工作，可以通过以下方式进行小额捐助 每一份支持都是对我们的巨大鼓励！
       </p>
       <div class="donation-methods">
         <p v-if="wechatPayQr || alipayQr">
@@ -48,11 +48,11 @@
       </div>
 
       <h3>合作与商业赞助</h3>
-      <p>我们欢迎各种形式的合作与商业赞助。如果您或您的企业希望：</p>
+      <p>我们欢迎各种形式的合作与商业赞助 如果您或您的企业希望：</p>
       <ul>
         <li v-for="collaborationPoint in collaboration_points" :key="collaborationPoint">{{ collaborationPoint }}</li>
       </ul>
-      <p>请通过以下方式联系我们，我们非常期待与您探讨合作的可能性。</p>
+      <p>请通过以下方式联系我们，我们非常期待与您探讨合作的可能性 </p>
 
       <h3>宣传与分享</h3>
       <p>
@@ -89,7 +89,7 @@
       </p>
     </section>
     <footer>
-      <p>&copy; {{ current_year }} {{ copyright_holder }}。您的支持意义非凡。</p>
+      <p>&copy; {{ current_year }} {{ copyright_holder }} 您的支持意义非凡 </p>
     </footer>
     <!-- E -->
     
@@ -100,13 +100,15 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { useRouter } from 'vue-router';
+
+
 const router = useRouter()
 const page_title = ref('支持我们');
 const tagline = ref('您的支持是我们持续创作与改进的动力！');
 const project_name = ref('MindFLow');
 const contact_person_or_team = ref('林圣杰 尹心怡 19857198709'); 
 const project_type_description = ref('开源项目'); 
-const project_goal = ref('为用户提供高效的解决方案');
+const project_goal = ref('为用户提供高效的计划清单');
 const support_benefits = ref([
   '覆盖服务器和维护成本',
   '投入更多时间进行新功能开发和优化',
@@ -136,4 +138,5 @@ const Return = ()=>
 
 <style scoped>
 @import '@assets/sponsor.css';
+
 </style>
