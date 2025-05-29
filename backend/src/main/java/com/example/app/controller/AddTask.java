@@ -17,29 +17,21 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-
-
-/**
- * 1. AddTask 添加任务的类
- * 2. doPost 处理post请求
- * 主要的代码逻辑: 设置response内容格式
- * 
- * 
- * 
- * 
- * 
- * 
- */
-
-
-
-
 @WebServlet("/api/addtask")
 public class AddTask extends HttpServlet {
+    /**
+     * 1. AddTask 添加任务的类
+     * 2. doPost 处理post请求
+     * 主要的代码逻辑: 设置response内容格式
+     */
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        /*
+         * 1. 处理post请求
+         * 2. 
+         */
 
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
@@ -49,16 +41,17 @@ public class AddTask extends HttpServlet {
         StringBuilder sb = new StringBuilder();
 
         // 读取请求体内容
+        // try自动释放reader
         String line;
-        try (BufferedReader reader = request.getReader()) { 
+        try (BufferedReader reader = request.getReader()) {
             while ((line = reader.readLine()) != null) {
                 sb.append(line);
             }
         }
 
-        String requestBody = sb.toString();
-        Task taskWithoutId = gson.fromJson(requestBody, Task.class);
-        String generatedId = GetId.getUuid();
+        String request_body = sb.toString();
+        Task task_withoutId = gson.fromJson(request_body, Task.class);
+        String generated_id = GetId.getUuid();
         HttpSession session = request.getSession();
         if (session == null || session.getAttribute("user_id") == null) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
@@ -69,13 +62,13 @@ public class AddTask extends HttpServlet {
         int user_id = (int) session.getAttribute("user_id");
 
         Task task = new Task();
-        task.setId(generatedId);
-        task.setName(taskWithoutId.getName());
-        task.setIsdelete(taskWithoutId.getIsdelete());
-        task.setTime(taskWithoutId.getTime());
-        task.setNotified(taskWithoutId.getNotified());
+        task.setId(generated_id);
+        task.setName(task_withoutId.getName());
+        task.setIsdelete(task_withoutId.getIsdelete());
+        task.setTime(task_withoutId.getTime());
+        task.setNotified(task_withoutId.getNotified());
         task.setUserid(user_id);
-        task.setImportance(taskWithoutId.getImportance());
+        task.setImportance(task_withoutId.getImportance());
 
         try {
             taskdao.addTask(task);

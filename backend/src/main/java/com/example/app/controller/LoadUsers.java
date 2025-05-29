@@ -28,7 +28,6 @@ public class LoadUsers extends HttpServlet {
         // 2. 返回对应的数据
         Dao td = new Dao();
 
-
         try{
             // 1. 获取数据
             List<User> users = td.getAllUsers();

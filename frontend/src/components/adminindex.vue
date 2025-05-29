@@ -3,13 +3,6 @@ import axios from 'axios';
 import { ref, onMounted, } from 'vue';
 import { ShowCustomModal } from '../ts/model';
 import { useRouter } from 'vue-router';
-
-// A 获取后端用户的数据
-// B 挂载的时候触发
-// C 对用户信息进行操作
-// D 弹窗信息
-
-
 interface User {
     id: number;
     user_name: string;
@@ -19,8 +12,12 @@ const Users = ref<User[]>([])
 const router = useRouter()
 
 
-// A 获取后端用户的数据
 const FetchData = async () => {
+
+    /**
+     * 获取数据
+     */
+
     try {
         const response = await axios.get('/api/loaduser', {
             headers: {
@@ -38,15 +35,6 @@ const FetchData = async () => {
     catch (error) {
         console.error('获取用户信息失败', error);
     }
-
-    // debug 
-    // Users.value = [
-    //     { id: 1, user_name: '刘备', email: 'liubei@shuhan.com' },
-    //     { id: 2, user_name: '关羽', email: 'guanyu@shuhan.com' },
-    //     { id: 3, user_name: '张飞', email: 'zhangfei@shuhan.com' },
-    //     { id: 4, user_name: '曹操', email: 'caocao@caowei.com' },
-    //     { id: 5, user_name: '孙权', email: 'sunquan@sunwu.com' },
-    // ];
 };
 
 
@@ -84,38 +72,42 @@ const DeleteUser = async (userid: number) => {
 const is_message_editorvisible = ref(false);
 const message_content = ref('');
 const target_user_for_message = ref<User | null>(null);
-
 const SendMessage = async () => {
-    if (!target_user_for_message.value || !message_content.value.trim()) {
+    if (!target_user_for_message.value || !message_content.value.trim()) { 
         ShowCustomModal("请选择用户并输入消息内容。");
         return;
     }
 
-    // 发送消息
-    // TODO:s
     try {
         const response = await axios.post('/api/sendmessage', {
-            "message": message_content.value,
+            "message": message_content.value.trim(), 
             "id": target_user_for_message.value.id
         },
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-        if (response.status == 201) {
-            if (response.data.message) {
-            ShowCustomModal(`${response.data.message}`)
+        {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+
+        if (response.status === 201 && response.data && response.data.message) {
+            ShowCustomModal(response.data.message);
+            closeMessageEditor(); 
+        } else if (response.data && response.data.error) { 
+            ShowCustomModal(response.data.error);
+        } else if (response.status !== 201) { 
+            ShowCustomModal(`发送失败，状态码: ${response.status}`);
         }
-        }
-        if (response.data.error) {
-            ShowCustomModal(`${response.data.message}`)
-        }
-    }
-    catch (error: any) {
+
+    } catch (error: any) {
         console.error("发送消息失败:", error);
+        if (error.response && error.response.data && error.response.data.error) {
+            ShowCustomModal(`发送消息失败: ${error.response.data.error}`);
+        } else {
+            ShowCustomModal("发送消息失败，请查看控制台了解详情。");
+        }
     }
-}
+};
+
 
 const ShowMassage = (userId: number) => {
     const user = Users.value.find(u => u.id === userId);

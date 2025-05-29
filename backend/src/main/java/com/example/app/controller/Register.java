@@ -50,7 +50,6 @@ public class Register extends HttpServlet {
     private void HandleRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 检查 Content-Type 是否是 application/json
         if (!"application/json".equalsIgnoreCase(request.getContentType())) {
-            //  //
             response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
             response.setContentType("application/json");
             return;
@@ -149,8 +148,6 @@ public class Register extends HttpServlet {
         public String getUser_name() {
             return user_name;
         }
-
-
 
         public String getEmail() {
             return email;

@@ -14,12 +14,6 @@ public class DB {
     
     private static final String PASSWORD = "!Lsj20041021";
 
-    /**
-     *  获取数据库连接
-     *
-     * @return Connection 返回数据库连接
-     * @throws SQLException 抛出错误
-     */
     public static Connection getConnection() throws SQLException {
         // 加载 JDBC 驱动
         try {
@@ -30,12 +24,7 @@ public class DB {
             throw new SQLException("Database connection error", e);
         }
     }
-
-    /**
-     * 关闭数据库连接
-     *
-     * @param connect Connection 对象
-     */
+    
     public static void close(Connection connect) {
         if (connect != null) {
             try {

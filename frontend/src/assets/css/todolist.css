@@ -739,3 +739,171 @@ body.todolist {
 .button-close-modal:hover {
     background-color: #5a6268;
 }
+
+
+
+
+/* --- 邮箱模态框特定样式 --- */
+.mailbox-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.mailbox-container {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.mailbox-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 15px;
+}
+
+.mailbox-header h3 {
+    margin: 0;
+    font-size: 1.4em;
+    color: #333;
+}
+
+.refresh-mailbox-btn {
+    background: none;
+    border: none;
+    font-size: 1.3em;
+    color: #555;
+    cursor: pointer;
+    padding: 5px;
+    margin-left: auto;
+    margin-right: 10px;
+}
+.refresh-mailbox-btn:hover {
+    color: #007bff;
+}
+.refresh-mailbox-btn:disabled {
+    color: #aaa;
+    cursor: not-allowed;
+}
+
+.close-mailbox-btn {
+    background: none;
+    border: none;
+    font-size: 1.8em;
+    color: #777;
+    cursor: pointer;
+    padding: 0 5px;
+    line-height: 1;
+}
+.close-mailbox-btn:hover {
+    color: #333;
+}
+
+.mailbox-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 10px; /* 避免内容被滚动条遮挡 */
+}
+
+.loading-indicator,
+.empty-mailbox {
+    text-align: center;
+    padding: 30px 0;
+    color: #777;
+    font-style: italic;
+}
+
+.email-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.email-item {
+    padding: 12px 8px;
+    border-bottom: 1px solid #f0f0f0;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease-in-out;
+}
+
+.email-item:last-child {
+    border-bottom: none;
+}
+
+.email-item:hover {
+    background-color: #f9f9f9;
+}
+
+.email-subject {
+    font-weight: 500;
+    color: #333;
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.email-time {
+    font-size: 0.85em;
+    color: #666;
+    white-space: nowrap;
+}
+
+.mailbox-footer {
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 15px;
+    text-align: right;
+}
+
+.mailbox-footer button {
+    background-color: #6c757d; /* 示例颜色 */
+    color: white;
+    padding: 8px 15px; /* 调整内边距 */
+    border: none;
+    border-radius: 4px;
+}
+
+.mailbox-footer button:hover {
+    background-color: #5a6268;
+}
+
+/* 过渡动画 (mailbox-modal) */
+.mailbox-modal-enter-active,
+.mailbox-modal-leave-active {
+    transition: opacity 0.3s ease;
+}
+.mailbox-modal-enter-active .mailbox-container,
+.mailbox-modal-leave-active .mailbox-container {
+    transition: transform 0.3s ease;
+}
+
+.mailbox-modal-enter-from,
+.mailbox-modal-leave-to {
+    opacity: 0;
+}
+.mailbox-modal-enter-from .mailbox-container,
+.mailbox-modal-leave-to .mailbox-container {
+    transform: scale(0.95) translateY(-20px);
+}
+.mailbox-modal-enter-to .mailbox-container,
+.mailbox-modal-leave-from .mailbox-container {
+    transform: scale(1) translateY(0);
+}

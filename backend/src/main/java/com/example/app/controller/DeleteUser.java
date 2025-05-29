@@ -92,7 +92,4 @@ public class DeleteUser extends HttpServlet {
             response.getWriter().write(gson.toJson(error));
     }
     }
-
-
-
 }

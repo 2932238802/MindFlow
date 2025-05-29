@@ -10,8 +10,6 @@ import { ShowCustomModal } from '../ts/model';
 
 
 
-
-
 //———————————————— 组件参数 ——————————————————//
 const activeForm = ref<'login' | 'register'>('login');
 const router = useRouter();
@@ -48,8 +46,6 @@ const register_data = reactive<register_form_state>({
 
 
 
-
-
 //———————————————— 组件函数 ——————————————————//
 /**
  * 切换 登录和注册状态
@@ -66,10 +62,6 @@ const Sleep = (time: number): Promise<void> => {
     }
     );
 };
-
-
-
-
 
 
 

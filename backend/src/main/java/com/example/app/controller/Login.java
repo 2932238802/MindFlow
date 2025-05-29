@@ -107,10 +107,9 @@ public class Login extends HttpServlet {
 
                     // 验证一下 //
                     if (PasswordEncrypt.verify(password, hashedPassword)) {
-                        // 验证通过
+                        // 保存到会话里面
                         jakarta.servlet.http.HttpSession session =request.getSession(true);   // true 表示没有session 就创建
                         session.setAttribute("user_id", user_id);
-
 
                         response.setStatus(HttpServletResponse.SC_CREATED);
                         response.setContentType("application/json");
@@ -154,8 +153,6 @@ public class Login extends HttpServlet {
         public String getUser_name() { // Getter 方法
             return user_name;
         }
-
-
 
         public String getPassword() { // Getter 方法
             return password;

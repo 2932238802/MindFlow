@@ -1,5 +1,6 @@
 package com.example.app.dao;
 
+import com.example.app.model.Email;
 import com.example.app.model.Task;
 import com.example.app.model.User;
 import com.example.app.util.DB;
@@ -110,9 +111,9 @@ public class Dao {
         return for_return;
     }
 
-
     /**
      * clearTask 清理用户点击删除的任务
+     * 
      * @param user_id 用户id
      * @throws SQLException
      */
@@ -148,6 +149,29 @@ public class Dao {
             query_format.setString(2, message);
             query_format.executeUpdate();
         }
+    }
+
+    public List<Email> getAllMessage(int userId) throws SQLException { // 参数名改为 userId
+        List<Email> emails = new ArrayList<>(); // 使用菱形操作符
+        String query = "SELECT id, user_id, message, sent_at FROM email WHERE user_id = ?";
+        // 使用 try-with-resources 来确保 Connection 和 PreparedStatement 被正确关闭
+        try (Connection connection = DB.getConnection();
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) { // 变量名更规范
+
+            preparedStatement.setInt(1, userId); // **关键：设置 PreparedStatement 的参数**
+
+            try (ResultSet result = preparedStatement.executeQuery()) { // ResultSet 也应在 try-with-resources 中
+                while (result.next()) {
+                    Email email = new Email();
+                    email.setId(result.getInt("id"));
+                    email.setUserId(result.getInt("user_id"));
+                    email.setMessage(result.getString("message"));
+                    email.setSentAt(result.getTimestamp("sent_at"));
+                    emails.add(email);
+                }
+            }
+        }
+        return emails;
     }
 
 }
