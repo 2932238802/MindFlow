@@ -23,7 +23,6 @@ import java.sql.SQLException;
 @WebServlet("/api/login")
 public class Login extends HttpServlet {
 
-    // 定义一个 ObjectMapper 实例，用于解析 JSON
     private static final ObjectMapper objectmapper = new ObjectMapper();
 
     @Override

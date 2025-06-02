@@ -14,7 +14,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession; // 引入 HttpSession
+import jakarta.servlet.http.HttpSession; 
 
 @WebServlet("/api/loadmessages")
 public class LoadMessage extends HttpServlet {

@@ -54,7 +54,6 @@ public class Dao {
         try (Connection connection = DB.getConnection();
                 PreparedStatement query_format = connection.prepareStatement(query)) {
             ResultSet result = query_format.executeQuery();
-
             while (result.next()) {
                 User user = new User();
                 user.setId(result.getInt("user_id"));
@@ -93,6 +92,7 @@ public class Dao {
         String query = "UPDATE tasks SET isdeleted = NOT isdeleted WHERE id = ? AND user_id = ?;";
         String check = "SELECT isdeleted FROM tasks WHERE id = ? AND user_id = ?;";
         Boolean for_return = false;
+        
         try (Connection connection = DB.getConnection();
                 PreparedStatement query_format = connection.prepareStatement(query);
                 PreparedStatement check_format = connection.prepareStatement(check)) {

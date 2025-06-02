@@ -48,14 +48,12 @@ public class Cleartask extends HttpServlet {
       JsonObject result = new JsonObject();
       result.addProperty("message", "已清理所有标记为已删除的任务");
 
-      // todo : √
       response.getWriter().write(gson.toJson(result));
 
     } catch (SQLException e) {
       response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
       JsonObject error = new JsonObject();
 
-      // todo : √
       error.addProperty("error", "清理已删除任务失败，请稍后重试");
       response.getWriter().write(gson.toJson(error));
     }
