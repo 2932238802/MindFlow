@@ -22,7 +22,6 @@ MindFlow 是一个简单的在线任务清单
 
 ```shell
 cd MindFlow
-cd backend
 ./script.sh
 ```
 
