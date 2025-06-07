@@ -4,6 +4,7 @@ import com.example.app.model.Email;
 import com.example.app.model.Task;
 import com.example.app.model.User;
 import com.example.app.util.DB;
+import com.example.app.util.PasswordEncrypt;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,7 +16,85 @@ import java.util.List;
 
 public class Dao {
 
+    // 登录信息查询
+    public int checkUser(String user_name, String password) throws SQLException
+    {
+        try (
+                // 获取数据库连接 //
+                Connection connect = DB.getConnection();
+
+                // 创建一个查询的语句 //
+                PreparedStatement prep = connect.prepareStatement(
+                        "SELECT * FROM users WHERE user_name = ?")
+        ) {
+            // 为 SQL 查询中的占位符绑定参数
+            // 第一个问号绑定用户名参数 (1 表示第一个问号)
+            // 第二个问号绑定用户密码参数 (2 表示第二个问号)
+            prep.setString(1, user_name);
+
+            // 执行查询操作 并使用 try-with-resources 确保 ResultSet 自动关闭 //
+            try (ResultSet result = prep.executeQuery()) {
+                if (result.next()) {
+                    // 获得mysql的数据 //
+                    String hashedPassword = result.getString("password");
+
+                    int user_id = result.getInt("user_id");
+
+                    if (PasswordEncrypt.verify(password, hashedPassword)) {
+                        return user_id;
+                    }
+                    else {
+                        return -1;
+                    }
+                }
+                else {
+                    return -1;
+                }
+            }
+        } 
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return -1;
+    }
+
     // 获取所有任务
+    public boolean addUser(String user_name, String encry_pass_word, String email) throws SQLException {
+        String prep_check = "SELECT COUNT(*) AS count FROM users WHERE user_name = ? OR email = ?";
+
+        String prep_insert = "INSERT INTO users (user_name, password, email) VALUES (?,?,?)";
+
+        // executeQuery() SELECT 查询 ResultSet
+        // executeUpdate() INSERT/UPDATE/DELETE 等修改语句 int（受影响行数）
+        try (Connection connection = DB.getConnection();
+                PreparedStatement query_check_format = connection.prepareStatement(prep_check);
+                PreparedStatement query_insert_format = connection.prepareStatement(prep_insert);
+
+        ) {
+            query_check_format.setString(1, user_name);
+            query_check_format.setString(2, email);
+
+            // 返回查询结果
+            ResultSet result = query_check_format.executeQuery();
+
+            if (result.next() && result.getInt("count") > 0) {
+                return false;
+            }
+
+            // 没有返回 那么就是正常运行
+            query_insert_format.setString(1, user_name);
+            query_insert_format.setString(2, encry_pass_word);
+            query_insert_format.setString(3, email);
+
+            int flag = query_insert_format.executeUpdate();
+            if (flag > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Task> getAlltask(int user_id_out) throws SQLException {
 
         // 创建一个链表
@@ -43,6 +122,8 @@ public class Dao {
                 // 设置
                 tasks.add(task_tmp);
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return tasks;
     }
@@ -92,7 +173,7 @@ public class Dao {
         String query = "UPDATE tasks SET isdeleted = NOT isdeleted WHERE id = ? AND user_id = ?;";
         String check = "SELECT isdeleted FROM tasks WHERE id = ? AND user_id = ?;";
         Boolean for_return = false;
-        
+
         try (Connection connection = DB.getConnection();
                 PreparedStatement query_format = connection.prepareStatement(query);
                 PreparedStatement check_format = connection.prepareStatement(check)) {
@@ -116,7 +197,7 @@ public class Dao {
      * 1. user_id 用户id
      * 2. SQLException 异常
      */
-    // todo : √
+    // TODO: √
     public void clearTask(int user_id) throws SQLException {
         String query = "DELETE FROM tasks WHERE isdeleted = TRUE AND user_id = ?;";
 
@@ -150,16 +231,16 @@ public class Dao {
         }
     }
 
-    public List<Email> getAllMessage(int userId) throws SQLException { 
-        List<Email> emails = new ArrayList<>(); 
+    public List<Email> getAllMessage(int userId) throws SQLException {
+        List<Email> emails = new ArrayList<>();
         String query = "SELECT id, user_id, message, sent_at FROM email WHERE user_id = ?";
 
         try (Connection connection = DB.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query)) { 
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) {
 
-            preparedStatement.setInt(1, userId); 
+            preparedStatement.setInt(1, userId);
 
-            try (ResultSet result = preparedStatement.executeQuery()) { 
+            try (ResultSet result = preparedStatement.executeQuery()) {
                 while (result.next()) {
                     Email email = new Email();
                     email.setId(result.getInt("id"));

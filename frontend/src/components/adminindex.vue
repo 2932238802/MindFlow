@@ -4,16 +4,11 @@ import { ref, onMounted, } from 'vue';
 import { ShowCustomModal } from '../ts/model';
 import { useRouter } from 'vue-router';
 
-
-
 interface User {
     id: number;
     user_name: string;
     email: string;
 }
-
-
-
 
 // 用户数组
 const Users = ref<User[]>([])

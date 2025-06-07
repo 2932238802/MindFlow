@@ -5,15 +5,13 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
-import com.fasterxml.jackson.databind.ObjectMapper; 
+import com.google.gson.Gson;
 
 import com.example.app.util.PasswordEncrypt;
-import com.example.app.util.DB;
+
+import java.io.IOException;
+
+import com.example.app.dao.Dao;
 
 /**
  * 监听注册信息
@@ -22,11 +20,11 @@ import com.example.app.util.DB;
 @WebServlet("/api/register")
 public class Register extends HttpServlet {
 
-    // 定义一个 ObjectMapper 实例，用于解析 JSON 数据 (Jackson 库)
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final Gson gson = new Gson();
+
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         // 获取请求 URL 路径 //
         String path = request.getRequestURI();
 
@@ -37,15 +35,15 @@ public class Register extends HttpServlet {
             } catch (Exception e) {
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+                response.getWriter().write("{f\"message\":\"处理失败,发生错误\"}");
             }
         }
     }
 
     /**
      * 为用户注册处理逻辑
-     *
-     * @param request  请求对象
-     * @param response 响应对象
+     * 请求对象
+     * 响应对象
      */
     private void HandleRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 检查 Content-Type 是否是 application/json
@@ -67,71 +65,35 @@ public class Register extends HttpServlet {
         // 解析 JSON
         RegisterRequest registerRequest;
         try {
-            // 使用 ObjectMapper 将 JSON 数据反序列化为 Java 对象
-            registerRequest = objectMapper.readValue(jsonbuilder.toString(), RegisterRequest.class);
-        } catch (Exception e) {
-            // 如果解析 JSON 失败，返回 400 Bad Request
-            // 
+            registerRequest = gson.fromJson(jsonbuilder.toString(), RegisterRequest.class);
+        } 
+        catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setContentType("application/json");
-            response.getWriter().write("{\"message\":\"Invalid JSON data.\"}");
+            response.getWriter().write("{f\"message\":\"无效的json信息\"}");
             return;
         }
 
         // 获取注册信息
+        Dao dao = new Dao();
         String user_name = registerRequest.getUser_name();
         String password = registerRequest.getPassword();
         String email = registerRequest.getEmail();
+        String encrypted_password = PasswordEncrypt.encrypt(password);
 
+        //添加童虎
+        boolean flag = dao.addUser(user_name, encrypted_password, email);
 
-        try (
-                // 连接数据库
-                Connection connection = DB.getConnection();
-
-                PreparedStatement prep_check = connection.prepareStatement(
-                        "SELECT COUNT(*) AS count FROM users WHERE user_name = ? OR email = ?");
-
-                PreparedStatement prep_insert = connection.prepareStatement(
-                        "INSERT INTO users (user_name, password, email) VALUES (?,?,?)")
-        ) {
-            // 检查是否重复 //
-            prep_check.setString(1, user_name);
-            prep_check.setString(2, email);
-
-            try (ResultSet result = prep_check.executeQuery()) {
-                if (result.next() && result.getInt("count") > 0) {
-                    // 如果重复，返回错误 //
-                    response.setStatus(HttpServletResponse.SC_CONFLICT);
-                    response.setContentType("application/json");
-                    response.getWriter().write("{\"message\":\"Username or email already exists.\"}");
-                    return;
-                }
-            }
-
-            // 插入新数据
-            String encrypted_password = PasswordEncrypt.encrypt(password);
-
-            prep_insert.setString(1, user_name);
-            prep_insert.setString(2, encrypted_password);
-            prep_insert.setString(3, email);
-
-            // executeUpdate() 是 PreparedStatement 对象的一个方法
-            // 它执行的是与数据库更新有关的 SQL 语句，例如 INSERT、UPDATE 和 DELETE
-            // 并返回被影响的行数（即完成操作后数据库发生更改的记录数）
-            int rows_affected = prep_insert.executeUpdate();
-
-            if (rows_affected > 0) {
-                response.setStatus(HttpServletResponse.SC_CREATED);
-                response.setContentType("application/json");
-            } else {
-                response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-                response.setContentType("application/json");
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        if (flag == false) {
+            response.setStatus(HttpServletResponse.SC_CONFLICT);
             response.setContentType("application/json");
+            response.getWriter().write("{\"message\":\"账号或者邮箱已经存在\"}");
+            return;
+        }
+        else{
+            response.setStatus(HttpServletResponse.SC_CREATED);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\":\"登录成功\"}");
         }
     }
 

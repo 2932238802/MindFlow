@@ -85,7 +85,7 @@ const project = ref({
     "每日计划的增删查改",
   ],
   target_audience: "本项目主要服务于 all people!",
-  tech_intro: "本项目主要使用java ts vue html js css scss等进行的开发",
+  tech_intro: "本项目主要使用java ts vue html css scss等进行的开发",
   technology_stack: [
     "openjdk 17.0.15",
     "vue 3.5.13",

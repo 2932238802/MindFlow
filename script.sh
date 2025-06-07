@@ -55,3 +55,5 @@ sudo $TOMCAT_DIR/bin/startup.sh || {
 }
 
 echo "Deployment completed successfully"
+
+

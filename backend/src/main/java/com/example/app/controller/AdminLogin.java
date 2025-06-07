@@ -13,6 +13,9 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 1. 封装一个类 用户登陆的类
+ */
 class AdminLoginRequest {
     private String user_name;
     private String password;
