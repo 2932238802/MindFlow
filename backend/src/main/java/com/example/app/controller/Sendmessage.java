@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import com.example.app.dao.Dao;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException; // 引入 JsonSyntaxException
+import com.google.gson.JsonSyntaxException;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -22,8 +22,8 @@ public class Sendmessage extends HttpServlet {
 
     @Override
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        System.out.println("------------ API /api/sendmessage received ------------");
 
+        // 设置格式
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
@@ -38,8 +38,6 @@ public class Sendmessage extends HttpServlet {
             }
             json_pay_string = json_payload_builder.toString();
 
-            System.out.println("Received JSON payload string: " + json_pay_string);
-
             if (json_pay_string == null || json_pay_string.trim().isEmpty()) {
                 System.err.println("Error: Request payload is empty or null.");
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -49,22 +47,26 @@ public class Sendmessage extends HttpServlet {
                 return;
             }
 
+            // 转换成json
             JsonObject requestjson = gson.fromJson(json_pay_string, JsonObject.class);
 
             if (!requestjson.has("id") || requestjson.get("id").isJsonNull()) {
-                System.err.println("Error: Missing 'id' field or 'id' is null in JSON payload.");
+                System.err.println("Error: Missing 'id' field or 'id' is null in JSON payload");
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+                // 错误消息
                 JsonObject error = new JsonObject();
-                error.addProperty("error", "请求中缺少 'id' 字段或 'id' 为空!");
+                error.addProperty("error", "请求中缺少 'id' 字段或 'id' 为空");
                 response.getWriter().write(gson.toJson(error));
+
                 return;
             }
 
             if (!requestjson.has("message") || requestjson.get("message").isJsonNull()) {
-                System.err.println("Error: Missing 'message' field or 'message' is null in JSON payload.");
+                System.err.println("Error: Missing 'message' field or 'message' is null in JSON payload");
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 JsonObject error = new JsonObject();
-                error.addProperty("error", "请求中缺少 'message' 字段或 'message' 为空!");
+                error.addProperty("error", "请求中缺少 'message' 字段或 'message' 为空");
                 response.getWriter().write(gson.toJson(error));
                 return;
             }
@@ -75,14 +77,20 @@ public class Sendmessage extends HttpServlet {
             String message;
 
             try {
+                // 获取id 信息
                 userid = requestjson.get("id").getAsInt();
             } catch (NumberFormatException | IllegalStateException e) {
-                System.err.println("Error: 'id' field is not a valid integer in JSON payload.");
-                e.printStackTrace(); // 打印异常堆栈
+                // 打印异常堆栈
+                e.printStackTrace(); 
+
+                // 设置发送信息的状态
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+                // 返回错误信息
                 JsonObject error = new JsonObject();
                 error.addProperty("error", "'id' 字段必须是一个有效的整数!");
                 response.getWriter().write(gson.toJson(error));
+                
                 return;
             }
 
@@ -100,15 +108,17 @@ public class Sendmessage extends HttpServlet {
                 return;
             }
 
-            System.out.println("Attempting to send message User ID: " + userid + ", Message: " + message);
             dao.sendMessage(userid, message);
-
-            System.out.println("Message sent successfully for user_id: " + userid);
             response.setStatus(HttpServletResponse.SC_CREATED);
+
             JsonObject ok = new JsonObject();
+
             ok.addProperty("message", "信息发送成功");
             response.getWriter().write(gson.toJson(ok));
-        } catch (JsonSyntaxException e) {
+
+        }
+        
+        catch (JsonSyntaxException e) {
             System.err.println("Invalid JSON format Received payload: " + json_pay_string);
             e.printStackTrace(); // 打印完整的异常堆栈
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);

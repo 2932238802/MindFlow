@@ -61,14 +61,20 @@ public class ToggleTask extends HttpServlet {
             Boolean theid_isdelete = td.alterTaskStata(id,user_id);
 
             JsonObject jsonresponse = new JsonObject();
+
             jsonresponse.addProperty("isdelete_from_backend", theid_isdelete);
             jsonresponse.addProperty("id", id);
+
             response.getWriter().write(gson.toJson(jsonresponse));
+
         } catch (SQLException e) {
 
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+            
+            // 发送错误 json 语句
             JsonObject errorresponse = new JsonObject();
             errorresponse.addProperty("error", "改变任务的时候发生问题");
+
             response.getWriter().write(gson.toJson(errorresponse));
         }
     }

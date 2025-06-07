@@ -24,18 +24,20 @@ public class AddTask extends HttpServlet {
      * 2. doPost 处理post请求
      * 主要的代码逻辑: 设置response内容格式
      */
-
+    
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         /*
          * 1. 处理post请求
-         * 2. 
          */
 
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-
+        
+        // 获取json 转换器
+        // 获取后端与数据库的接口
+        // StringBuilder 字符串构建器
         Gson gson = new Gson();
         Dao taskdao = new Dao();
         StringBuilder sb = new StringBuilder();
@@ -49,6 +51,8 @@ public class AddTask extends HttpServlet {
             }
         }
 
+        // request_body 请求内容
+        // task_withoutId 
         String request_body = sb.toString();
         Task task_withoutId = gson.fromJson(request_body, Task.class);
         String generated_id = GetId.getUuid();

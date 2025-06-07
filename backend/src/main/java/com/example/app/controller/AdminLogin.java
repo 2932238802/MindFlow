@@ -36,6 +36,10 @@ class AdminLoginRequest {
 
 @WebServlet("/api/adminlogin")
 public class AdminLogin extends HttpServlet {
+    /**
+     * 1. 管理员登录界面
+     * 2. 处理管理员请求
+     */
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 

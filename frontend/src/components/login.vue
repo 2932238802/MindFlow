@@ -110,16 +110,16 @@ const SubmitLogin = async (event: Event) => {
             localStorage.setItem('UserName', login_data.user_name);
             sessionStorage.setItem('UserName', login_data.user_name);
 
-            Sleep(1000).then(() => { 
+            Sleep(1000).then(() => {
                 ShowCustomModal("登录成功!");
-                router.push({ name: 'todolist' }); 
+                router.push({ name: 'todolist' });
             });
         } else {
-            ShowCustomModal(response.data.message || '登录失败，请检查响应。');
+            ShowCustomModal(response.data.message || '登录失败，请检查响应 ');
         }
     } catch (error: any) {
         if (axios.isAxiosError(error)) {
-            ShowCustomModal(error.response?.data.message || '登录失败，请重试。');
+            ShowCustomModal(error.response?.data.message || '登录失败，请重试 ');
         } else {
             ShowCustomModal('An unexpected error occurred!');
         }
@@ -133,7 +133,7 @@ const SubmitRegister = async (event: Event) => {
     try {
         // 验证密码与确认密码是否匹配
         if (register_data.password !== register_data.password_confirm) {
-            ShowCustomModal('密码与确认密码不匹配。');
+            ShowCustomModal('密码与确认密码不匹配 ');
             return;
         }
 
@@ -146,23 +146,22 @@ const SubmitRegister = async (event: Event) => {
 
         // 处理成功响应 //
         if (response.status === 201) {
-            ShowCustomModal('注册成功！请登录。');
+            ShowCustomModal('注册成功！请登录 ');
             showLogin();
         }
     }
 
     catch (error: any) {
         if (axios.isAxiosError(error)) {
-            ShowCustomModal(error.response?.data.message || '注册失败，请重试。');
+            ShowCustomModal(error.response?.data.message || '注册失败，请重试 ');
         } else {
-            ShowCustomModal('发生意外错误。');
+            ShowCustomModal('发生意外错误 ');
         }
     }
 };
 
-const AdminLogin = ()=>
-{
-    router.push({name:"adminlogin"})
+const AdminLogin = () => {
+    router.push({ name: "adminlogin" })
 }
 
 </script>
@@ -181,7 +180,7 @@ const AdminLogin = ()=>
                 </button>
             </div>
 
-            <form id="login-form" class="form" method="POST" :class="{ active: activeForm === 'login' }" >
+            <form id="login-form" class="form" method="POST" :class="{ active: activeForm === 'login' }">
                 <h2>账户登录</h2>
                 <div class="input-group">
                     <label for="login-username">用户名</label>
@@ -226,5 +225,4 @@ const AdminLogin = ()=>
 </template>
 <style scoped>
 @import '@assets/login.css';
-
 </style>

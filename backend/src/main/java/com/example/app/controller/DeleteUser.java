@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletResponse;
 public class DeleteUser extends HttpServlet {
 
     @Override
-    public void doPost(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException{
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         // 设置回应格式
         response.setContentType("application/json");
@@ -37,18 +37,16 @@ public class DeleteUser extends HttpServlet {
         StringBuilder jsonPayloadBuilder = new StringBuilder();
 
         // 读取到json文件里面
-        try{
+        try {
             reader = request.getReader();
-            String line ;
-            while((line = reader.readLine())!= null)
-            {
+            String line;
+            while ((line = reader.readLine()) != null) {
                 jsonPayloadBuilder.append(line);
             }
 
             String jsonPayString = jsonPayloadBuilder.toString();
 
-            if(jsonPayString.isEmpty())
-            {
+            if (jsonPayString.isEmpty()) {
                 // 请求的问题
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
@@ -63,8 +61,7 @@ public class DeleteUser extends HttpServlet {
             JsonObject requestJson = gson.fromJson(jsonPayString, JsonObject.class);
 
             // 转成json结构体之后 要进行读取
-            if(!requestJson.has("userid"))
-            {
+            if (!requestJson.has("userid")) {
                 // 请求的问题
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
@@ -90,6 +87,6 @@ public class DeleteUser extends HttpServlet {
             JsonObject error = new JsonObject();
             error.addProperty("error", "删除用户失败，请稍后重试");
             response.getWriter().write(gson.toJson(error));
-    }
+        }
     }
 }

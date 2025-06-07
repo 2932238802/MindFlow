@@ -7,7 +7,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import com.example.app.util.PasswordEncrypt;
 import com.example.app.util.DB;
 
-import com.fasterxml.jackson.databind.ObjectMapper; // 用于解析 JSON 数据
+import com.fasterxml.jackson.databind.ObjectMapper; 
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class Login extends HttpServlet {
     /**
      * 私有成员函数 处理登录请求
      * 处理登录请求 然后和数据库验证一下
-     *
+     * 
      * @param request  这个是请求对象
      * @param response 这个是响应对象
      */
@@ -43,7 +43,7 @@ public class Login extends HttpServlet {
         if (!"application/json".equalsIgnoreCase(request.getContentType())) {
             // 如果请求不是 JSON 格式，直接返回 415
             response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
-            response.getWriter().write("{\"message\":\"Unsupported content type. Please use application/json.\"}");
+            response.getWriter().write("{\"message\":\"application/json please\"}");
             return;
         }
 
@@ -74,7 +74,6 @@ public class Login extends HttpServlet {
         // 获取登录信息
         String user_name = loginRequest.getUser_name();
         String password = loginRequest.getPassword();
-
 
         // 根据数据库处理 信息是不是正确 //
         // 使用 try-with-resources 自动管理资源
@@ -118,15 +117,15 @@ public class Login extends HttpServlet {
                     else {
                         response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                         response.setContentType("application/json");
-                        response.getWriter().write("{\"message\":\"Login failed. Incorrect username or password\"}");
-                        System.out.println("Login failed! Incorrect username or password");
+                        response.getWriter().write("{\"message\":\"Login failed Incorrect username or password\"}");
+                        System.out.println("Login failed Incorrect username or password");
                     }
                 }
                 else {
                     // 如果用户名不存在
                     response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                     response.setContentType("application/json");
-                    response.getWriter().write("{\"message\":\"Login failed. Incorrect username or password\"}");
+                    response.getWriter().write("{\"message\":\"Login failed Incorrect username or password\"}");
                     System.out.println("Login failed! User not found");
                 }
             }

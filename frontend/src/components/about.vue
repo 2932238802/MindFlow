@@ -49,7 +49,8 @@
         如果你有任何问题、建议或反馈，欢迎通过
         <a v-if="author.contact.email" :href="`mailto:${author.contact.email}`">{{ author.contact.email }}</a>
         <span v-if="author.contact.email && author.contact.linkurl"> 或 </span>
-        <a v-if="author.contact.linkurl" :href=author.contact.linkurl target="_blank" rel="noopener noreferrer">{{ author.contact.linkText || '项目主页' }}</a>
+        <a v-if="author.contact.linkurl" :href=author.contact.linkurl target="_blank" rel="noopener noreferrer">{{
+          author.contact.linkText || '项目主页' }}</a>
         联系我们。
       </p>
     </section>
@@ -67,19 +68,18 @@
 
 <script setup>
 import { ref, computed } from 'vue';
-import { useRouter  } from 'vue-router';
+import { useRouter } from 'vue-router';
 
 const router = useRouter()
 
-const Return = ()=>
-{
-    router.push({name:'index'})
+const Return = () => {
+  router.push({ name: 'index' })
 }
 
 const project = ref({
   name: "MindFLow",
   tagline: "打造免费的简单大气每日计划清单",
-  description: "MindFLow 是一款坚持更新,采纳使用者意见,制作的一款免费简单大气的在线每日清单。",
+  description: "MindFLow 是一款坚持更新,采纳使用者意见,制作的一款免费简单大气的在线每日清单",
   features: [
     "登陆注册信息保护",
     "每日计划的增删查改",
@@ -97,12 +97,12 @@ const project = ref({
 });
 
 const author = ref({
-  name: "林圣杰 尹心怡", 
+  name: "林圣杰 尹心怡",
   bio: "希望对大家有所帮助",
   contact: {
-    email: "19857198709@163.com", 
-    linkText: "MindFlow", 
-    linkurl: "https://github.com/2932238802/MindFlow.git" 
+    email: "19857198709@163.com",
+    linkText: "MindFlow",
+    linkurl: "https://github.com/2932238802/MindFlow.git"
   }
 });
 const copyright_year = computed(() => new Date().getFullYear());
@@ -110,6 +110,4 @@ const copyright_year = computed(() => new Date().getFullYear());
 </script>
 <style scoped>
 @import '@assets/about.css';
-
 </style>
-

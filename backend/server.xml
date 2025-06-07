@@ -1,12 +1,19 @@
 <?xml version='1.0' encoding='utf-8'?>
+
+
+<!-- 关闭的端口 -->
 <Server port="8005" shutdown="SHUTDOWN">
     <Listener className="org.apache.catalina.startup.VersionLoggerListener" />
+
     <GlobalNamingResources>
     </GlobalNamingResources>
+
     <Service name="Catalina">
         <Host name="localhost" appBase="webapps"
               unpackWARs="true" autoDeploy="true">
         </Host>
+
+        <!-- 端口连接位置 -->
         <Connector
                 port="8080"
                 protocol="HTTP/1.1"
@@ -17,6 +24,8 @@
                 acceptCount="100"
                 URIEncoding="UTF-8"
         />
+
+        <!-- Catalina -->
         <Engine name="Catalina" defaultHost="localhost">
             <Realm className="org.apache.catalina.realm.LockOutRealm">
                 <Realm className="org.apache.catalina.realm.UserDatabaseRealm"
@@ -31,5 +40,8 @@
                        pattern="%h %l %u %t &quot;%r&quot; %s %b" />
             </Host>
         </Engine>
+
+
     </Service>
+
 </Server>

@@ -78,14 +78,14 @@ public class Register extends HttpServlet {
             return;
         }
 
-        // 获取注册信息 //
+        // 获取注册信息
         String user_name = registerRequest.getUser_name();
         String password = registerRequest.getPassword();
         String email = registerRequest.getEmail();
 
 
         try (
-                // 连接数据库 //
+                // 连接数据库
                 Connection connection = DB.getConnection();
 
                 PreparedStatement prep_check = connection.prepareStatement(

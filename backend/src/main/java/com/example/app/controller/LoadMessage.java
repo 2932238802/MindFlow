@@ -59,7 +59,8 @@ public class LoadMessage extends HttpServlet {
             JsonObject error = new JsonObject();
             error.addProperty("error", "数据库操作失败: " + e.getMessage());
             response.getWriter().write(gson.toJson(error));
-        } catch (Exception e) { 
+        } 
+        catch (Exception e) { 
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             JsonObject error = new JsonObject();

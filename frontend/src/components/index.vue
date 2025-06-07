@@ -8,11 +8,11 @@ function HandleLogin() {
 }
 
 function HandleAbout() {
-    router.push({name:'about'})
+    router.push({ name: 'about' })
 }
 
 function HandleSponsor() {
-    router.push({name:'sponsor'})
+    router.push({ name: 'sponsor' })
 }
 </script>
 
@@ -37,5 +37,4 @@ function HandleSponsor() {
 
 <style scoped>
 @import '@assets/index.css';
-
 </style>

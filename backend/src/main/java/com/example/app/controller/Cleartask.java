@@ -16,9 +16,9 @@ import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/api/cleartasks")
 public class Cleartask extends HttpServlet {
-
-  public void init() throws ServletException {
-  }
+  /**
+   * 1. 清理任务的请求
+   */
 
   @Override
   protected void doDelete(HttpServletRequest request, HttpServletResponse response)
@@ -29,7 +29,7 @@ public class Cleartask extends HttpServlet {
     Gson gson = new Gson();
     Dao dao = new Dao();
 
-    // 获取id 
+    // 获取id
     HttpSession session = request.getSession();
     if (session == null || session.getAttribute("user_id") == null) {
       // 说明还没认证

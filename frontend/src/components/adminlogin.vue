@@ -50,7 +50,7 @@ const SubmitLogin = async (event: Event) => {
         if (response.status === 200) {
             localStorage.setItem('UserName', login_data.user_name);
             sessionStorage.setItem('UserName', login_data.user_name);
-            router.push({ name: 'adminindex' }); 
+            router.push({ name: 'adminindex' });
         } else {
             ShowCustomModal(response.data.message || '登录失败，请检查响应');
         }
@@ -64,36 +64,37 @@ const SubmitLogin = async (event: Event) => {
 };
 
 
-const Return = ()=>
-{
-    router.push({name:"login"})
+const Return = () => {
+    router.push({ name: "login" })
 }
 </script>
 
 
 <template>
-<body>
-    <div class="login-container">
-        <h1>MindAdmin</h1>
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="username">用户名:</label>
-                <input type="text" id="username" name="username" required autocomplete="username"  v-model="login_data.user_name">
-            </div>
-            <div class="form-group">
-                <label for="password">密码:</label>
-                <input type="password" id="password" name="password" required autocomplete="current-password" v-model="login_data.password">
-            </div>
-            <div>
+
+    <body>
+        <div class="login-container">
+            <h1>MindAdmin</h1>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="username">用户名:</label>
+                    <input type="text" id="username" name="username" required autocomplete="username"
+                        v-model="login_data.user_name">
+                </div>
+                <div class="form-group">
+                    <label for="password">密码:</label>
+                    <input type="password" id="password" name="password" required autocomplete="current-password"
+                        v-model="login_data.password">
+                </div>
+                <div>
                     <a href="#" class="adminlogin" @click="Return">返回登录</a>
-            </div>
-            <button type="submit"  @click="SubmitLogin">登 录</button>
-            
-        </form>
-    </div>
-</body>
+                </div>
+                <button type="submit" @click="SubmitLogin">登 录</button>
+
+            </form>
+        </div>
+    </body>
 </template>
 <style scoped>
 @import '@assets/adminlogin.css';
-
 </style>

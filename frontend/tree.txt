@@ -1,0 +1,224 @@
+.
+├── dist
+│   └── assets
+├── node_modules
+│   ├── @babel
+│   │   ├── helper-string-parser
+│   │   │   └── lib
+│   │   ├── helper-validator-identifier
+│   │   │   └── lib
+│   │   ├── parser
+│   │   │   ├── bin
+│   │   │   ├── lib
+│   │   │   └── typings
+│   │   └── types
+│   │       └── lib
+│   │           ├── asserts
+│   │           │   └── generated
+│   │           ├── ast-types
+│   │           │   └── generated
+│   │           ├── builders
+│   │           │   ├── flow
+│   │           │   ├── generated
+│   │           │   ├── react
+│   │           │   └── typescript
+│   │           ├── clone
+│   │           ├── comments
+│   │           ├── constants
+│   │           │   └── generated
+│   │           ├── converters
+│   │           ├── definitions
+│   │           ├── modifications
+│   │           │   ├── flow
+│   │           │   └── typescript
+│   │           ├── retrievers
+│   │           ├── traverse
+│   │           ├── utils
+│   │           │   └── react
+│   │           └── validators
+│   │               ├── generated
+│   │               └── react
+│   ├── @esbuild
+│   │   └── linux-x64
+│   │       └── bin
+│   ├── @jridgewell
+│   │   └── sourcemap-codec
+│   │       └── dist
+│   │           └── types
+│   ├── @rollup
+│   │   ├── rollup-linux-x64-gnu
+│   │   └── rollup-linux-x64-musl
+│   ├── @types
+│   │   ├── estree
+│   │   └── node
+│   │       ├── assert
+│   │       ├── compatibility
+│   │       ├── dns
+│   │       ├── fs
+│   │       ├── readline
+│   │       ├── stream
+│   │       ├── timers
+│   │       └── ts5.6
+│   ├── @vitejs
+│   │   └── plugin-vue
+│   │       └── dist
+│   ├── @volar
+│   │   ├── language-core
+│   │   │   └── lib
+│   │   ├── source-map
+│   │   │   └── lib
+│   │   └── typescript
+│   │       └── lib
+│   │           ├── node
+│   │           ├── protocol
+│   │           ├── quickstart
+│   │           └── typescript
+│   ├── @vue
+│   │   ├── compiler-core
+│   │   │   └── dist
+│   │   ├── compiler-dom
+│   │   │   └── dist
+│   │   ├── compiler-sfc
+│   │   │   └── dist
+│   │   ├── compiler-ssr
+│   │   │   └── dist
+│   │   ├── compiler-vue2
+│   │   │   └── types
+│   │   ├── devtools-api
+│   │   │   └── lib
+│   │   │       ├── cjs
+│   │   │       │   └── api
+│   │   │       └── esm
+│   │   │           └── api
+│   │   ├── language-core
+│   │   │   └── lib
+│   │   │       ├── codegen
+│   │   │       │   ├── script
+│   │   │       │   ├── style
+│   │   │       │   ├── template
+│   │   │       │   └── utils
+│   │   │       ├── parsers
+│   │   │       ├── plugins
+│   │   │       ├── utils
+│   │   │       └── virtualFile
+│   │   ├── reactivity
+│   │   │   └── dist
+│   │   ├── runtime-core
+│   │   │   └── dist
+│   │   ├── runtime-dom
+│   │   │   └── dist
+│   │   ├── server-renderer
+│   │   │   └── dist
+│   │   ├── shared
+│   │   │   └── dist
+│   │   └── tsconfig
+│   ├── alien-signals
+│   │   ├── cjs
+│   │   ├── esm
+│   │   └── types
+│   ├── balanced-match
+│   ├── brace-expansion
+│   ├── csstype
+│   ├── de-indent
+│   ├── entities
+│   │   └── lib
+│   │       ├── esm
+│   │       │   └── generated
+│   │       └── generated
+│   ├── esbuild
+│   │   ├── bin
+│   │   └── lib
+│   ├── estree-walker
+│   │   ├── dist
+│   │   │   ├── esm
+│   │   │   └── umd
+│   │   ├── src
+│   │   └── types
+│   ├── fdir
+│   │   └── dist
+│   │       ├── api
+│   │       │   └── functions
+│   │       └── builder
+│   ├── he
+│   │   ├── bin
+│   │   └── man
+│   ├── magic-string
+│   │   └── dist
+│   ├── minimatch
+│   │   └── dist
+│   │       ├── commonjs
+│   │       └── esm
+│   ├── muggle-string
+│   │   └── out
+│   ├── nanoid
+│   │   ├── async
+│   │   ├── bin
+│   │   ├── non-secure
+│   │   └── url-alphabet
+│   ├── path-browserify
+│   │   └── test
+│   ├── picocolors
+│   ├── picomatch
+│   │   └── lib
+│   ├── postcss
+│   │   └── lib
+│   ├── rollup
+│   │   └── dist
+│   │       ├── bin
+│   │       ├── es
+│   │       │   └── shared
+│   │       └── shared
+│   ├── source-map-js
+│   │   └── lib
+│   ├── tinyglobby
+│   │   └── dist
+│   ├── typescript
+│   │   ├── bin
+│   │   └── lib
+│   │       ├── cs
+│   │       ├── de
+│   │       ├── es
+│   │       ├── fr
+│   │       ├── it
+│   │       ├── ja
+│   │       ├── ko
+│   │       ├── pl
+│   │       ├── pt-br
+│   │       ├── ru
+│   │       ├── tr
+│   │       ├── zh-cn
+│   │       └── zh-tw
+│   ├── undici-types
+│   ├── vite
+│   │   ├── bin
+│   │   ├── dist
+│   │   │   ├── client
+│   │   │   ├── node
+│   │   │   │   └── chunks
+│   │   │   └── node-cjs
+│   │   ├── misc
+│   │   └── types
+│   │       └── internal
+│   ├── vscode-uri
+│   │   └── lib
+│   │       ├── esm
+│   │       └── umd
+│   ├── vue
+│   │   ├── compiler-sfc
+│   │   ├── dist
+│   │   ├── jsx-runtime
+│   │   └── server-renderer
+│   ├── vue-router
+│   │   ├── dist
+│   │   └── vetur
+│   └── vue-tsc
+│       └── bin
+├── public
+├── router
+└── src
+    ├── assets
+    │   └── css
+    ├── components
+    └── ts
+
+222 directories

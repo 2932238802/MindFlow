@@ -113,9 +113,8 @@ public class Dao {
 
     /**
      * clearTask 清理用户点击删除的任务
-     * 
-     * @param user_id 用户id
-     * @throws SQLException
+     * 1. user_id 用户id
+     * 2. SQLException 异常
      */
     // todo : √
     public void clearTask(int user_id) throws SQLException {
@@ -151,16 +150,16 @@ public class Dao {
         }
     }
 
-    public List<Email> getAllMessage(int userId) throws SQLException { // 参数名改为 userId
-        List<Email> emails = new ArrayList<>(); // 使用菱形操作符
+    public List<Email> getAllMessage(int userId) throws SQLException { 
+        List<Email> emails = new ArrayList<>(); 
         String query = "SELECT id, user_id, message, sent_at FROM email WHERE user_id = ?";
-        // 使用 try-with-resources 来确保 Connection 和 PreparedStatement 被正确关闭
+
         try (Connection connection = DB.getConnection();
-                PreparedStatement preparedStatement = connection.prepareStatement(query)) { // 变量名更规范
+                PreparedStatement preparedStatement = connection.prepareStatement(query)) { 
 
-            preparedStatement.setInt(1, userId); // **关键：设置 PreparedStatement 的参数**
+            preparedStatement.setInt(1, userId); 
 
-            try (ResultSet result = preparedStatement.executeQuery()) { // ResultSet 也应在 try-with-resources 中
+            try (ResultSet result = preparedStatement.executeQuery()) { 
                 while (result.next()) {
                     Email email = new Email();
                     email.setId(result.getInt("id"));
