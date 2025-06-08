@@ -49,14 +49,11 @@ public class LoadTasks extends HttpServlet {
     }
     int user_id = (int) session.getAttribute("user_id");
 
-
     Dao td = new Dao();
 
     try{
-      // 1. 获取数据
       List<Task> tasks = td.getAlltask(user_id);
 
-      // 2. 转换成 json格式
       Gson gson = new Gson();
       String json_response = gson.toJson(tasks);
 

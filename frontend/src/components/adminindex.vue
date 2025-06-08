@@ -13,8 +13,35 @@ interface User {
 // 用户数组
 const Users = ref<User[]>([])
 
-
 const router = useRouter()
+
+// 要删除的用户
+const user_to_delete = ref<User | null>(null);
+
+// 如果点击了删除
+const is_confirm_visible = ref(false)
+
+
+
+
+
+
+
+
+// 关闭确定按钮
+const CloseConfirmModal = () => {
+    is_confirm_visible.value = false;
+    user_to_delete.value = null;
+}
+
+const PrepareDeleteUser = (user: User) => {
+    user_to_delete.value = user;
+    is_confirm_visible.value = true;
+};
+
+
+
+
 
 
 const FetchData = async () => {
@@ -46,17 +73,18 @@ const FetchData = async () => {
 
 
 
-
 // B 挂载的时候触发
 onMounted(() => {
     FetchData();
 });
 
 
+
 // C 对用户信息进行操作
-const DeleteUser = async (userid: number) => {
+const DeleteUser = async () => {
+
     const response = await axios.post('/api/deleteuser', {
-        "userid": userid
+        "userid": user_to_delete.value?.id
     },
         {
             headers: {
@@ -66,7 +94,7 @@ const DeleteUser = async (userid: number) => {
     );
     // TODO: √
     if (response.status == 200) {
-        Users.value = Users.value.filter(t => t.id !== userid)
+        Users.value = Users.value.filter(t => t.id !== user_to_delete.value?.id)
         ShowCustomModal(response.data.message)
     }
     else {
@@ -76,8 +104,11 @@ const DeleteUser = async (userid: number) => {
         }
     }
 
-
+    // 关闭
+    CloseConfirmModal()
 }
+
+
 const is_message_editorvisible = ref(false);
 
 const message_content = ref('');
@@ -123,7 +154,7 @@ const SendMessage = async () => {
     }
 };
 
-const ShowMassage = (userId: number) => {
+const ShowMessage = (userId: number) => {
 
     const user = Users.value.find(u => u.id === userId);
 
@@ -196,8 +227,9 @@ const Return = () => {
 
                                 <td>
                                     <div class="actions">
-                                        <button class="action-button message" @click="ShowMassage(user.id)">提醒</button>
-                                        <button class=" action-button delete" @click="DeleteUser(user.id)">删除</button>
+                                        <button class="action-button message" @click="ShowMessage(user.id)">提醒</button>
+                                        <button class=" action-button delete"
+                                            @click="PrepareDeleteUser(user)">删除</button>
                                     </div>
                                 </td>
 
@@ -211,6 +243,23 @@ const Return = () => {
                 </div>
             </main>
 
+
+            <div v-if="is_confirm_visible" class="modal-overlay" @click.self="CloseConfirmModal">
+                <div class="modal-content confirm-dialog">
+                    <h3><i class="fas fa-exclamation-triangle"></i> 确认删除用户</h3>
+                    <p>您确定要删除用户 <strong>{{ user_to_delete ? user_to_delete.user_name : '' }}</strong> (ID: {{
+                        user_to_delete ? user_to_delete.id : '' }}) 吗？<br>
+                        此操作将永久删除该用户的所有数据，且无法恢复。</p>
+                    <div class="confirm-actions">
+                        <button @click="CloseConfirmModal" class="confirm-cancel">
+                            <i class="fas fa-times"></i> 取消
+                        </button>
+                        <button @click="DeleteUser()" class="confirm-delete">
+                            <i class="fas fa-trash-alt"></i> 确认删除
+                        </button>
+                    </div>
+                </div>
+            </div>
 
 
             <!-- D 消息发送部分 -->
@@ -230,12 +279,7 @@ const Return = () => {
 
                 </div>
 
-
-
-
             </div>
-
-
 
 
             <!-- C 版权部分 -->

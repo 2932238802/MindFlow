@@ -69,4 +69,3 @@ cd MindFlow
 * **构建工具**:
   * Maven
     * Maven WAR 插件: `3.3.2`
-

@@ -337,3 +337,113 @@ footer {
 
 
 
+.modal-content { /* 通用模态框内容区基础样式 */
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    color: #212529;
+    line-height: 1.6;
+    box-sizing: border-box;
+}
+
+
+.modal-content.confirm-dialog {
+    padding: 35px 40px; /* 比消息框略紧凑的 padding */
+    max-width: 460px; /* 比消息框略窄 */
+    text-align: center; /* 确认对话框内容通常居中 */
+}
+
+.modal-content.confirm-dialog h3 {
+    color: #000000; /* 与之前标题颜色一致 */
+    font-size: 20px; /* 比消息框标题略小一点 */
+    font-weight: 700;
+    margin-top: 0;
+    margin-bottom: 20px; /* 标题与下方文本的间距 */
+    display: flex; /* 用于图标和文字对齐 */
+    align-items: center;
+    justify-content: center; /* 标题内容（包括图标）居中 */
+}
+
+.modal-content.confirm-dialog h3 i.fa-exclamation-triangle {
+    color: #ffc107; /* 警告图标颜色 (黄色系) */
+    font-size: 1.1em; /* 图标略大于文字 */
+    margin-right: 10px;
+}
+
+.modal-content.confirm-dialog p {
+    font-size: 15px;
+    color: #495057; /* 段落文字颜色，使用次要文字色 */
+    margin-bottom: 30px; /* 段落与按钮组的间距 */
+    line-height: 1.7; /* 增加行高以便阅读 */
+}
+
+.modal-content.confirm-dialog p strong {
+    color: #c82333; /* 强调用户名和ID，使用危险操作相关的红色 */
+    font-weight: 600;
+}
+
+/* 确认按钮容器样式 */
+.confirm-actions {
+    display: flex;
+    justify-content: center; /* 按钮居中 */
+    gap: 15px; /* 按钮之间的间距 */
+}
+
+.confirm-actions button {
+    padding: 10px 20px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, color 0.15s ease-in-out, opacity 0.15s ease-in-out;
+    display: inline-flex; /* 用于图标和文字对齐 */
+    align-items: center;
+    justify-content: center;
+    min-width: 120px; /* 给按钮一个最小宽度 */
+    box-sizing: border-box;
+}
+
+.confirm-actions button i {
+    margin-right: 8px; /* 图标与文字间距 */
+    font-size: 0.9em;
+}
+
+.confirm-actions .confirm-delete {
+    background-color: #dc3545; /* 危险操作的红色 (Bootstrap danger color) */
+    color: #ffffff;
+    border: 1px solid #dc3545;
+}
+
+.confirm-actions .confirm-delete:hover {
+    background-color: #c82333; /* Hover 时颜色加深 */
+    border-color: #bd2130;
+}
+
+.confirm-actions .confirm-delete:active {
+    background-color: #bd2130;
+    border-color: #b21f2d;
+    transform: translateY(1px);
+}
+
+.confirm-actions .confirm-cancel {
+    background-color: #f8f9fa;
+    color: #495057;
+    border: 1px solid #ced4da;
+}
+
+.confirm-actions .confirm-cancel:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+    color: #212529;
+}
+
+.confirm-actions .confirm-cancel:active {
+    background-color: #dee2e6;
+    border-color: #adb5bd;
+    transform: translateY(1px);
+}

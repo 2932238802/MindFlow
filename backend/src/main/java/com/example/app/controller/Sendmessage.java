@@ -27,6 +27,8 @@ public class Sendmessage extends HttpServlet {
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
 
+        // 数据库操作
+        // json_payload_builder java字符串
         Dao dao = new Dao();
         StringBuilder json_payload_builder = new StringBuilder();
         String json_pay_string = null;
@@ -39,9 +41,11 @@ public class Sendmessage extends HttpServlet {
             json_pay_string = json_payload_builder.toString();
 
             if (json_pay_string == null || json_pay_string.trim().isEmpty()) {
-                System.err.println("Error: Request payload is empty or null.");
+
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 JsonObject error = new JsonObject();
+
+                // 错误消息发送
                 error.addProperty("error", "请求体为空!");
                 response.getWriter().write(gson.toJson(error));
                 return;
@@ -58,12 +62,10 @@ public class Sendmessage extends HttpServlet {
                 JsonObject error = new JsonObject();
                 error.addProperty("error", "请求中缺少 'id' 字段或 'id' 为空");
                 response.getWriter().write(gson.toJson(error));
-
                 return;
             }
 
             if (!requestjson.has("message") || requestjson.get("message").isJsonNull()) {
-                System.err.println("Error: Missing 'message' field or 'message' is null in JSON payload");
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 JsonObject error = new JsonObject();
                 error.addProperty("error", "请求中缺少 'message' 字段或 'message' 为空");
@@ -81,7 +83,7 @@ public class Sendmessage extends HttpServlet {
                 userid = requestjson.get("id").getAsInt();
             } catch (NumberFormatException | IllegalStateException e) {
                 // 打印异常堆栈
-                e.printStackTrace(); 
+                e.printStackTrace();
 
                 // 设置发送信息的状态
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
@@ -90,16 +92,15 @@ public class Sendmessage extends HttpServlet {
                 JsonObject error = new JsonObject();
                 error.addProperty("error", "'id' 字段必须是一个有效的整数!");
                 response.getWriter().write(gson.toJson(error));
-                
+
                 return;
             }
 
             try {
                 message = requestjson.get("message").getAsString();
-            } 
+            }
             // IllegalStateException 运行时候的错误
             catch (IllegalStateException e) {
-                System.err.println("Error: 'message' field is not a valid string in JSON payload");
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 JsonObject error = new JsonObject();
@@ -117,10 +118,11 @@ public class Sendmessage extends HttpServlet {
             response.getWriter().write(gson.toJson(ok));
 
         }
-        
+
         catch (JsonSyntaxException e) {
-            System.err.println("Invalid JSON format Received payload: " + json_pay_string);
-            e.printStackTrace(); // 打印完整的异常堆栈
+            // 错误发送
+            // json处理错误
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             JsonObject error = new JsonObject();
             error.addProperty("error", "请求的JSON格式无效!");
@@ -128,7 +130,7 @@ public class Sendmessage extends HttpServlet {
         }
 
         catch (SQLException e) {
-            System.err.println("Failed to send message to database.");
+
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             JsonObject error = new JsonObject();
@@ -137,13 +139,12 @@ public class Sendmessage extends HttpServlet {
         }
 
         catch (Exception e) {
+            // 设置错误
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             JsonObject error = new JsonObject();
             error.addProperty("error", "服务器内部发生未知错误");
             response.getWriter().write(gson.toJson(error));
-        } finally {
-            System.out.println("------------ API /api/sendmessage (POST) finished ------------"); // 出口日志
         }
     }
 }

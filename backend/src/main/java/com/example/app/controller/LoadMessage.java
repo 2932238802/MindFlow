@@ -46,10 +46,8 @@ public class LoadMessage extends HttpServlet {
                 return;
             }
 
-            // 2. 调用 DAO 获取邮件
             List<Email> emails = dao.getAllMessage(user_id); 
 
-            // 3. 转换成 JSON 格式并发送响应
             String json_response = gson.toJson(emails);
             response.getWriter().write(json_response);
 

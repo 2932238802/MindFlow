@@ -33,7 +33,7 @@ cd $BACKEND_DIR
 mvn clean package || {
     echo "Error: Maven build failed"
     exit 1
-}
+} 
 
 if [ ! -f "./target/MindFlow-1.0.war" ]; then
     echo "Error: WAR file not found"
