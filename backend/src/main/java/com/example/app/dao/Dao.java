@@ -16,7 +16,11 @@ import java.util.List;
 
 public class Dao {
 
-    // 登录信息查询
+    /**
+     * 检查一下用户在不在
+     * 1，user_name 用户名 
+     * 2. password 密码
+     */
     public int checkUser(String user_name, String password) throws SQLException
     {
         try (
