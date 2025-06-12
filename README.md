@@ -21,11 +21,15 @@ MindFlow 是一个简单的在线任务清单
 ## 如何开始
 
 ```shell
+1. 首先保证自己本地安装好了 npm 和 mvn
+2. 然后下载官方的tomcat(Linux) 安装到 backend 目录下面即可 更改名字为tomcat
+3. 按照下面指令执行 
 cd MindFlow
 ./script.sh
 ```
 
 然后访问本地127.0.0.1:8080 即可开始本地部署了
+(具体哪个端口号 可以查看 tomcat的server.xml文件 进行修改)
 
 ## 技术栈
 

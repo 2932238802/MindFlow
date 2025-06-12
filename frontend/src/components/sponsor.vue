@@ -12,7 +12,7 @@
 
     <!-- B -->
     <section id="why-support">
-      <h2>为什么支持 {{ project_name }}？</h2>
+      <h2>为什么支持 {{ project_name }}?</h2>
       <p>
         {{ project_name }} 是一个{{ project_type_description }}
         我们致力于{{ project_goal }}

@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts">
-import { isModalVisible, modalMessage, CloseCustomModal } from './ts/model.ts'; // 确保路径正确
+import { isModalVisible, modalMessage, CloseCustomModal } from './ts/model.ts'; 
 </script>
 
 <style>
