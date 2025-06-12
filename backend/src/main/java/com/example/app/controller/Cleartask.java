@@ -23,14 +23,16 @@ public class Cleartask extends HttpServlet {
   @Override
   protected void doDelete(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
+        // 设置答复的那个格式
     response.setContentType("application/json");
     response.setCharacterEncoding("UTF-8");
 
+    // 前置参数
     Gson gson = new Gson();
     Dao dao = new Dao();
-
-    // 获取id
     HttpSession session = request.getSession();
+
+    // 从会话里面找一下 这个 user_id 因为我在登录注册的时候 保存的一个user_id
     if (session == null || session.getAttribute("user_id") == null) {
       // 说明还没认证
       response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

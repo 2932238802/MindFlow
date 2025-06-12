@@ -22,9 +22,8 @@ public class AddTask extends HttpServlet {
     /**
      * 1. AddTask 添加任务的类
      * 2. doPost 处理post请求
-     * 主要的代码逻辑: 设置response内容格式
      */
-    
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -34,7 +33,7 @@ public class AddTask extends HttpServlet {
 
         response.setContentType("application/json");
         response.setCharacterEncoding("utf-8");
-        
+
         // 获取json 转换器
         // 获取后端与数据库的接口
         // StringBuilder 字符串构建器
@@ -52,7 +51,7 @@ public class AddTask extends HttpServlet {
         }
 
         // request_body 请求内容
-        // task_withoutId 
+        // task_withoutId
         String request_body = sb.toString();
         Task task_withoutId = gson.fromJson(request_body, Task.class);
         String generated_id = GetId.getUuid();
@@ -77,11 +76,16 @@ public class AddTask extends HttpServlet {
         try {
             taskdao.addTask(task);
             JsonObject json_response = new JsonObject();
+            // addProperty这个是JsonObject用来增加属性的
+
             json_response.addProperty("id", task.getId());
             response.getWriter().write(gson.toJson(json_response));
-        } catch (SQLException e) {
+        } 
+        catch (SQLException e) {
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             JsonObject error = new JsonObject();
+
+            // 错误输出
             error.addProperty("error", "增加任务时候发生错误");
             response.getWriter().write(gson.toJson(error));
         }

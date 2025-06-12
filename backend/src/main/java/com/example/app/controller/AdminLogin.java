@@ -50,14 +50,19 @@ public class AdminLogin extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+                // 回复设置
         response.setContentType("application/json");
         response.setCharacterEncoding("UTF-8");
-        PrintWriter out = response.getWriter();
+
+        // 获得回复的执笔人
+        PrintWriter respons_writer = response.getWriter();
         Map<String, Object> json_response = new HashMap<>();
 
         try {
+            // 创建一个 AdminLoginRequest 管理员请求类
             AdminLoginRequest loginPayload = objectMapper.readValue(request.getInputStream(), AdminLoginRequest.class);
 
+            // 把请求里面
             String username = loginPayload.getUser_name();
             String password = loginPayload.getPassword();
 
@@ -65,6 +70,7 @@ public class AdminLogin extends HttpServlet {
                 response.setStatus(HttpServletResponse.SC_OK);
                 json_response.put("message", "登录成功");
                 Map<String, String> userData = new HashMap<>();
+
                 userData.put("username", username);
                 json_response.put("user", userData);
                 
@@ -78,8 +84,10 @@ public class AdminLogin extends HttpServlet {
             json_response.put("message", "请求格式错误 或者 服务器内部错误");
         }
         
-        out.print(objectMapper.writeValueAsString(json_response));
-        out.flush();
+        
+        // 回复顺便 清空一下缓冲区
+        respons_writer.print(objectMapper.writeValueAsString(json_response));
+        respons_writer.flush();
     }
 
     @Override

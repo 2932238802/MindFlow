@@ -66,9 +66,15 @@ public class Sendmessage extends HttpServlet {
             }
 
             if (!requestjson.has("message") || requestjson.get("message").isJsonNull()) {
+                // 状态码：401
+                // 设置状态信息
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
                 JsonObject error = new JsonObject();
+
+                // gson 这个地方就很方便
+                // 直接加入属性
                 error.addProperty("error", "请求中缺少 'message' 字段或 'message' 为空");
+                
                 response.getWriter().write(gson.toJson(error));
                 return;
             }
@@ -99,13 +105,19 @@ public class Sendmessage extends HttpServlet {
             try {
                 message = requestjson.get("message").getAsString();
             }
-            // IllegalStateException 运行时候的错误
             catch (IllegalStateException e) {
                 e.printStackTrace();
                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+                // error 这个是错误信息
                 JsonObject error = new JsonObject();
+
+                // TODO: 前端看一下呢
                 error.addProperty("error", "'message' 字段必须是一个有效的字符串!");
+                
+                // 
                 response.getWriter().write(gson.toJson(error));
+
                 return;
             }
 
@@ -143,6 +155,7 @@ public class Sendmessage extends HttpServlet {
             e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             JsonObject error = new JsonObject();
+            
             error.addProperty("error", "服务器内部发生未知错误");
             response.getWriter().write(gson.toJson(error));
         }

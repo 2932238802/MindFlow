@@ -15,7 +15,6 @@ import java.sql.SQLException;
 
 /**
  * 监听登录信息
- * 它监听 /api/login 路径 (相对于应用的上下文根)
  */
 @WebServlet("/api/login")
 public class Login extends HttpServlet {
@@ -47,9 +46,11 @@ public class Login extends HttpServlet {
             return;
         }
 
-        // 读取 JSON 数据 //
+        // 读取 JSON 数据
+        // 把这个数据存到 StringBuilder jsonBuilder 里面
         StringBuilder jsonBuilder = new StringBuilder();
         try (BufferedReader reader = request.getReader()) {
+            // line 用来保存对应的字符串
             String line;
             while ((line = reader.readLine()) != null) {
                 jsonBuilder.append(line);
@@ -79,11 +80,18 @@ public class Login extends HttpServlet {
 
         if (user_id!=-1) {
             jakarta.servlet.http.HttpSession session = request.getSession(true); // true 表示没有session 就创建
+            
+            // 设置一下会话信息 方便之后读取
             session.setAttribute("user_name", user_name);
             session.setAttribute("user_id", user_id);
+
+            // 
             response.setStatus(HttpServletResponse.SC_CREATED);
             response.setContentType("application/json");
+
+            // TODO: 前端
             response.getWriter().write("{\"message\":\"Login successful!\"}");
+
         } else {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
@@ -93,21 +101,16 @@ public class Login extends HttpServlet {
 
     }
 
-    /**
-     * 内部类，用于解析 JSON 数据
-     * 定义用户提交的登录信息 (user_name, password, remember)
-     */
+    
     private static class LoginRequest {
-        // 定义字段
         private String user_name;
         private String password;
-        // Getter 和 Setter 方法，采用符合 Java Bean 规范的命名方式
 
-        public String getUser_name() { // Getter 方法
+        public String getUser_name() { 
             return user_name;
         }
 
-        public String getPassword() { // Getter 方法
+        public String getPassword() {
             return password;
         }
     }

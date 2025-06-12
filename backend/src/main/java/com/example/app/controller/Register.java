@@ -13,27 +13,26 @@ import java.io.IOException;
 
 import com.example.app.dao.Dao;
 
-/**
- * 监听注册信息
- * 它监听 /api/register 路径 (相对于应用的上下文根)
- */
+
 @WebServlet("/api/register")
 public class Register extends HttpServlet {
 
     private static final Gson gson = new Gson();
 
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        // 获取请求 URL 路径 //
+        // 获取请求 URL 路径
         String path = request.getRequestURI();
 
-        // 如果路径是 /register //
+        // 如果路径是 /register
+        // 基础异常类 Exception java的所有异常 继承于这个
         if (path.endsWith("/register")) {
             try {
                 HandleRegister(request, response);
             } catch (Exception e) {
+
                 e.printStackTrace();
+
                 response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                 response.getWriter().write("{f\"message\":\"处理失败,发生错误\"}");
             }
@@ -47,13 +46,17 @@ public class Register extends HttpServlet {
      */
     private void HandleRegister(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 检查 Content-Type 是否是 application/json
+        // 一整个项目都是 application/json 所以需要检查一下 后面就不赘述了
+        // 媒体类型不对 状态码：415
         if (!"application/json".equalsIgnoreCase(request.getContentType())) {
+            // TODO: 最好前端能看看 
             response.setStatus(HttpServletResponse.SC_UNSUPPORTED_MEDIA_TYPE);
+
             response.setContentType("application/json");
             return;
         }
 
-        // 读取 JSON 数据 //
+        // 读取 JSON 数据
         StringBuilder jsonbuilder = new StringBuilder();
         try (var reader = request.getReader()) {
             String line;
@@ -63,6 +66,7 @@ public class Register extends HttpServlet {
         }
 
         // 解析 JSON
+        // 处理好的json 放到registerRequest里面
         RegisterRequest registerRequest;
         try {
             registerRequest = gson.fromJson(jsonbuilder.toString(), RegisterRequest.class);
@@ -81,7 +85,7 @@ public class Register extends HttpServlet {
         String email = registerRequest.getEmail();
         String encrypted_password = PasswordEncrypt.encrypt(password);
 
-        //添加童虎
+        // 添加童虎
         boolean flag = dao.addUser(user_name, encrypted_password, email);
 
         if (flag == false) {

@@ -1,20 +1,20 @@
 package com.example.app.model;
 
-import java.sql.Timestamp; 
+import java.sql.Timestamp;
 
-public class Email { 
+public class Email {
     /**
-     *  消息类
-     *  id 就是唯一标识符
-     *  user_id 就是用户的标识名字
-     *  message 消息
-     *  sent_at 发送的时间
+     * 消息类
+     * id 就是唯一标识符
+     * user_id 就是用户的标识名字
+     * message 消息
+     * sent_at 发送的时间
      */
 
-    private int id;         
-    private int user_id;      
-    private String message;  
-    private Timestamp sent_at; 
+    private int id;
+    private int user_id;
+    private String message;
+    private Timestamp sent_at;
 
     public Email() {
     }
