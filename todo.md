@@ -22,8 +22,6 @@
   * [x] GetId
   * [x] PasswordEncrypt
 
-  
-
 * [x] 完成前端代码的注释
   * [x] about
   * [x] adminindex
@@ -33,5 +31,8 @@
   * [x] sponsor
   * [x] todolist
 
+* [x] 再看还差什么
+
+* [X] ~~*再提交一次 所有*~~ [2025-06-12]
 
 
