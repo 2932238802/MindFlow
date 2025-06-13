@@ -101,16 +101,11 @@ public class Register extends HttpServlet {
         }
     }
 
-    /**
-     * 内部类，用于解析 JSON 数据
-     * 定义用户提交的注册信息 (user_name, email, password)
-     */
     private static class RegisterRequest {
         private String user_name;
         private String email;
         private String password;
 
-        // Getter 和 Setter 方法，确保 Jackson 可以正常解析
         public String getUser_name() {
             return user_name;
         }
